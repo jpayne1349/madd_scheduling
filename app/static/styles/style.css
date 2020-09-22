@@ -665,5 +665,30 @@
 }
 
 .reload_button {
+    position: absolute;
+    left: 20.5vw;
+    top: 9.5vh;
+    width: 3vw;
+    height: 3vw;
 
+}
+
+.reload_icon {
+
+    width: 2vw;
+    height: 2vw;
+
+}
+
+@keyframes spin {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+
+}
+
+.reload_spin {
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    
 }

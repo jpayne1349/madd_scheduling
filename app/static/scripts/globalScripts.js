@@ -1567,6 +1567,14 @@ function createStatPanel() {
     let reload_button = document.createElement('div');
     reload_button.className = 'reload_button';
 
+    let reload_icon = document.createElement('img');
+    reload_icon.className = 'reload_icon';
+    reload_icon.src = 'static/reload_icon.png';
+
+    reload_button.appendChild(reload_icon);
+
+    reload_button.addEventListener('click', reloadPanelData);
+
     // add icon to reload_button?
 
     stat_panel_div.appendChild(stat_panel_button);
@@ -1621,6 +1629,7 @@ function loadDatabaseEntries() {
         displayReassignedLeaderboard(employee_stats_list);
         reloadColumns(employee_stats_list);
         columnListeners(employee_stats_list);
+        stopReloadSpin();
     }
 
     function fail() {
@@ -1881,8 +1890,27 @@ function sortDates(list_of_date_elements, column) {
 
 // reload button in panel
 function reloadPanelData() {
+    let reload_icon = $('.reload_icon');
+    reload_icon[0].classList.add('reload_spin');
     loadDatabaseEntries();
 }
+
+// simple check to run in the loadDatabaseEntries function
+function stopReloadSpin() {
+    let reload_icon = $('.reload_icon');
+    // be cool to set the animation-interval to 1. and then stop it.
+    if( reload_icon[0].classList.contains('reload_spin')) {
+        reload_icon[0].style.animationIterationCount = '1';
+        setTimeout( function() {
+
+            reload_icon[0].classList.remove('reload_spin');
+            reload_icon[0].style.animationIterationCount = 'infinite';
+
+        }, 1000);
+    }
+}
+
+
 
 
 // ? for unequal assignments?
