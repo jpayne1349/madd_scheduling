@@ -1,0 +1,61 @@
+#!/bin/bash
+
+function start_server {
+
+    cd $1
+
+    echo 'Working Directory Found'
+    echo $PWD
+    
+    source env/bin/activate
+    echo 'ENVIRONMENT ACTIVATED'
+
+    printf 'Adding additional environment variables'
+    ( sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.' )
+    export PATH=$PWD/env/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+    export FLASK_APP=run.py
+    export VIRTUAL_ENV=$PWD/env
+    # we also need to set up some of the environment variables in here
+    
+    ( sleep 5s; open http://localhost:5000 ) &
+
+    ( 
+    sleep 1s; printf '******* OPENING Madd Scheduling WEB APP *******';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    sleep 0.5s; printf '.';
+    ) &
+
+    python3 run.py
+
+    
+}
+
+# variable=$(command)
+desktop_search=$(find ./Desktop -type f -name Madd_Scheduling_Click_To_Start -exec dirname {} \;)
+
+echo desktop_search
+
+downloads_search=$(find ./Downloads -type f -name Madd_Scheduling_Click_To_Start -exec dirname {} \;)
+
+documents_search=$(find ./Documents -type f -name Madd_Scheduling_Click_To_Start -exec dirname {} \;)
+
+
+# [[ ]] checks if variable is empty or not
+if [[ '$desktop_search' ]]; then
+    start_server $desktop_search
+elif [[ '$downloads_search' ]]; then
+    start_server $downloads_search
+elif [[ '$documents_search' ]]; then
+    start_server $documents_search
+else
+echo 'madd_scheduling folder not found in Desktop, Documents, or Downloads'
+echo 'Please place folder in one of these locations and try again.'
+fi

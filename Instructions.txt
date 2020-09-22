@@ -1,0 +1,10 @@
+
+
+Navigate to the Click_To_Start file in Terminal
+
+Make file executable with command:
+
+chmod 700 Madd_Scheduling_Click_To_Start
+
+Exit Terminal and double click file
+
