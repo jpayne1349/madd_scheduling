@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.1';
+var version_number = '0.4.2';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
