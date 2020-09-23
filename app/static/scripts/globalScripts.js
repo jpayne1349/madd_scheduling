@@ -1032,8 +1032,11 @@ function addAssignmentToDatabase(element, day_index, date) {
 
 // deletes an assignment from the database that is moved out of a day
 function deleteAssignmentFromDatabase(element, day_index, date) {
-    if(element.classList[2] == 'saved_previously') {
+    console.log(element.classList);
+    if(element.classList.contains('saved_previously')) {
         
+        console.log('deleting assignment');
+
         let username = element.classList[0];
 
         let date_object = getDates(date);
@@ -1136,6 +1139,7 @@ function placeAssignmentIntoDiv(first_name, last_name, day_index) {
     let new_block = document.createElement('div');
     new_block.classList.add(username);
     new_block.classList.add('assigned_employee_block');
+    new_block.classList.add('saved_previously');
     new_block.style.backgroundColor = parent_color;
     let new_name = document.createElement('div');
     new_name.classList.add('employee_name');
@@ -1433,6 +1437,7 @@ function insertElementIntoDiv(div_number, element) {
 
     element.classList.remove('employee_block');
     element.classList.add('assigned_employee_block');
+    element.classList.add('saved_previously');
     $(day_divs[div_number]).append(element);
 
     // setting new element position, so drag works correctly
@@ -1450,7 +1455,6 @@ function removeElementFromDiv(element_parent, element) {
     //$(day_divs[day_index]).remove(element);
     element.classList.remove('assigned_employee_block');
     element.classList.add('employee_block');
-    element.classList.add('saved_previously');
     
 
 }
@@ -1911,7 +1915,7 @@ function stopReloadSpin() {
 }
 
 
-
+// some bug with not deleting assignments when moving them around??
 
 // ? for unequal assignments?
 
