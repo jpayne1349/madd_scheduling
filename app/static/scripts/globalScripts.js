@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.3';
+var version_number = '0.4.4';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1032,11 +1032,8 @@ function addAssignmentToDatabase(element, day_index, date) {
 
 // deletes an assignment from the database that is moved out of a day
 function deleteAssignmentFromDatabase(element, day_index, date) {
-    console.log(element.classList);
     if(element.classList.contains('saved_previously')) {
         
-        console.log('deleting assignment');
-
         let username = element.classList[0];
 
         let date_object = getDates(date);
@@ -1606,16 +1603,32 @@ function createStatPanel() {
 
 // move stat panel up and down
 function toggleStatPanel(panel, line1, line2) {
-
+    
     if(panel.classList.contains('panel_visible') != true) {
         // can set loading spinners to turn on here.
         console.log('make loading spinners');
         loadDatabaseEntries();
 
+        let week_div = $('.week_div');
+        let week_div_pos = $(week_div).position();
+        let height = week_div[0].offsetHeight;
+        let windowHeight = window.innerHeight;
+        let panel_top_px = week_div_pos.top + height;
+        let panel_top_vh = (panel_top_px/windowHeight) * 100;
+        let panel_move_vh = 100 - panel_top_vh;
         
-    }
-    
+        panel.style.height = panel_move_vh + 'vh';
+        panel.style.transform = 'translate(0, -' + panel_move_vh +'vh)';
+
+    } else {
+        panel.style.transform = 'translate(0,0)';
+    }   
+
+    let panel_button = $('.stat_panel_button');
+    panel_button[0].classList.toggle('panel_button_slide');
+
     panel.classList.toggle('panel_visible');
+
     line1.classList.toggle('panel_open1');
     line2.classList.toggle('panel_open2');
 
