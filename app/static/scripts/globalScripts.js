@@ -1682,7 +1682,7 @@ function createEmployeeStatsList(database) {
 
         let new_option = document.createElement('option');
         new_option.value = index.toString();
-        new_option.innerText = employee_object.employee_full_name;
+        new_option.innerText = employee_object.employee_first_name;
 
         employee_selector[0].appendChild(new_option);
 
