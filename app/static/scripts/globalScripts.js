@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.2';
+var version_number = '0.4.3';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1538,6 +1538,10 @@ function createStatPanel() {
     column_title.className = 'column_title';
     column_title.innerText = 'Reassigned Leaderboard';
 
+    let unequal_advisory = document.createElement('div');
+    unequal_advisory.className = 'unequal_advisory';
+    unequal_advisory.innerText = 'Question marks in the Reassigned Leaderboard indicate unequal assignment values.' + '\n' + 'Employee may have more assigned days than requested days, or vice versa.';
+
     let employee_sel_title = document.createElement('div');
     employee_sel_title.className = 'employee_sel_title';
     employee_sel_title.innerText = 'Select Employee';
@@ -1593,6 +1597,7 @@ function createStatPanel() {
     stat_panel_div.appendChild(column_title);
     stat_panel_div.appendChild(reassigned_column);
     stat_panel_div.appendChild(reload_button);
+    stat_panel_div.appendChild(unequal_advisory);
 
 
     let page = $('#main_content');
@@ -1732,6 +1737,7 @@ function createEmployeeStatsList(database) {
             }
         } else {
             employee_object.equivalent_assignments = false;
+            employee_object.reassigned_count = 100;
         }
         employee_stats_list.push(employee_object);
     }
@@ -1776,7 +1782,12 @@ function displayReassignedLeaderboard(stats_list) {
         
         let reassigned_number = document.createElement('div');
         reassigned_number.className = 'reassigned_number';
-        reassigned_number.innerText = ranked_list[employee].reassigned_count;
+        
+        if (ranked_list[employee].equivalent_assignments == true ) {
+            reassigned_number.innerText = ranked_list[employee].reassigned_count;
+        } else {
+            reassigned_number.innerText = '?';
+        }
 
         leaderboard_block.appendChild(leaderboard_name);
         leaderboard_block.appendChild(reassigned_number);
@@ -1787,6 +1798,20 @@ function displayReassignedLeaderboard(stats_list) {
             break;
         }
     }
+    
+    let advisory = $('.unequal_advisory');
+    for( let employee = 0; employee < ranked_list.length; employee++) {
+        if(ranked_list[employee].equivalent_assignments == false) {
+            advisory[0].classList.add('show_advisory');
+            break;
+        }
+        if( employee == (ranked_list.length - 1)) {
+            if (advisory[0].classList.contains('show_advisory')) {
+                advisory[0].classList.remove('show_advisory');
+            }
+        }
+    }
+
 
     function getParentColor(username) {
         let employee_block_list = $('.employee_block');
@@ -1915,7 +1940,6 @@ function stopReloadSpin() {
 }
 
 
-// some bug with not deleting assignments when moving them around??
 
 // ? for unequal assignments?
 

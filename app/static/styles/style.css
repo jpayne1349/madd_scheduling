@@ -490,7 +490,7 @@
     /* margin-left: 10vw;
     margin-right: 10vw; */
     width:100vw;
-    height:60vh;
+    height:50vh;
     background-color: #addfad;
     transition: transform 2s;
     z-index: 4;
@@ -498,16 +498,38 @@
 }
 
 .panel_visible {
-    transform: translate(0, -60vh);
+    transform: translate(0, -50vh);
 }
 
 .column_title {
+    font-size: 1.5vw;
     position: absolute;
     display: inline-block;
-    left: 72.5vw;
+    left: 70vw;
     top: 4vh;
     width: 20vw;
-    min-height: 10vh;
+    text-align: center;
+
+}
+
+.unequal_advisory {
+    position: absolute;
+    text-align: center;
+    font-size: 1.5vw;
+    background-color: rgb(226, 225, 225);
+    width: 70vw;
+    top: 100%;
+    left: 15vw;
+    padding:10px;
+    border-radius: 35px;
+    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 7px 10px rgb(61, 61, 61);
+
+}
+
+.show_advisory {
+
+    transform: translate(0, -10vh);
 
 }
 
@@ -533,7 +555,13 @@
 }
 
 .leaderboard_name {
+    text-align: center;
+    margin-top: 2px;
+    height: 1.6vw;
     margin-left: 5px;
+    font-size: 1.5vw;
+    min-width: 10vw;
+    background-color: rgba(255, 255, 255, 0.794);
 }
 
 .reassigned_number {
@@ -580,6 +608,7 @@
 
 .employee_sel_title {
     position: absolute;
+    font-size: 1.5vw;
     left: 5vw;
     top: 6vh;
 }
@@ -596,6 +625,7 @@
 
 .month_sel_title {
     position: absolute;
+    font-size: 1.5vw;
     left: 5vw;
     top: 20vh;
 }
@@ -613,6 +643,7 @@
 
 .requested_col_title {
     position: absolute;
+    font-size: 1.5vw;
     left: 30vw;
     top: 5vh;
 }
@@ -640,6 +671,7 @@
 
 .assigned_col_title {
     position: absolute;
+    font-size: 1.5vw;
     left: 50vw;
     top: 5vh;
 }
