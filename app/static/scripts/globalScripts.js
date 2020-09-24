@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.4';
+var version_number = '0.4.5';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -100,7 +100,10 @@ function initialDisplay(date_object) {
     month_div.innerText = title_string;
 
     createStatPanel();
-    loadAssignmentsFromDatabase(date_object);
+
+    setTimeout( function() {
+        loadAssignmentsFromDatabase(date_object);
+    }, 100);
 
 }
 
@@ -179,7 +182,17 @@ function createWeekTemplate() {
     }
     day_div_array.push(month_name_div);
 
+    let assignment_spinner_container = document.createElement('div');
+    assignment_spinner_container.className = 'assignment_spinner_container';
+
+    let assignment_spinner = document.createElement('div');
+    assignment_spinner.className = 'assignment_spinner';
+
+    assignment_spinner_container.appendChild(assignment_spinner);
+
     week_div.appendChild(next_div);
+
+    week_div.appendChild(assignment_spinner_container);
 
     let page = document.getElementById('main_content');
     page.appendChild(month_name_div);
@@ -331,6 +344,11 @@ function createEmployeeColumn() {
     let employee_column_div = document.createElement('div');
     employee_column_div.id = 'employee_column_div';
     employee_column_div.style.opacity = '0';
+
+    let employee_block_spinner = document.createElement('div');
+    employee_block_spinner.className = 'employee_block_spinner';
+
+    employee_column_div.appendChild(employee_block_spinner);
 
     let page = document.getElementById('main_content');
 
@@ -523,6 +541,8 @@ function populateFromRequested() {
 // AJAX request to server to load and display saved employees
 function loadEmployeesFromDatabase() {
 
+    toggleEmployeeSpinner();
+
     $.ajax({
         type: "POST",
         url: '/loadEmployee/',
@@ -534,6 +554,8 @@ function loadEmployeesFromDatabase() {
 
     function success(employee_list) {
         
+        toggleEmployeeSpinner();
+
         for( let count = 0; count < employee_list.length; count++) {
 
             // parse out all employees received
@@ -552,6 +574,24 @@ function loadEmployeesFromDatabase() {
 
     function fail() {
         console.log('load employees ajax failed');
+    }
+
+}
+
+// toggle the spinner to show and spin
+function toggleEmployeeSpinner() {
+    let spinner = $('.employee_block_spinner');
+    
+    if( spinner[0].classList.contains('employee_block_spin')) {
+        spinner[0].style.opacity = '0';
+
+        setTimeout( function() {
+            spinner[0].classList.remove('employee_block_spin');
+        }, 400 );
+
+    } else {
+        spinner[0].style.opacity = '1';
+        spinner[0].classList.add('employee_block_spin');
     }
 
 }
@@ -1069,9 +1109,11 @@ function deleteAssignmentFromDatabase(element, day_index, date) {
     }
 }
 
-// load the assignments of the current week? for now until week changes implemented
+// load the assignments of the week from the passed in date
 function loadAssignmentsFromDatabase(date) {
-    
+
+    toggleAssignmentSpinner();
+
     let date_object = getDates(date);
     let month_array = date_object.month_array;
     let date_array = date_object.date_array;
@@ -1095,6 +1137,8 @@ function loadAssignmentsFromDatabase(date) {
 
     function success(assignment_list) {
         // day loop
+        toggleAssignmentSpinner();
+
         for( let i = 0; i < assignment_list.length; i++) {
             // assignment loop
             for( let j = 0; j < assignment_list[i].length; j++) {
@@ -1112,6 +1156,24 @@ function loadAssignmentsFromDatabase(date) {
 
     function fail() {
         console.log('load assignmentz ajax failed');
+    }
+
+}
+
+function toggleAssignmentSpinner() {
+    let spinner = $('.assignment_spinner');
+
+    if(spinner[0].classList.contains('assignment_spin')) {
+        spinner[0].style.opacity = '0';
+
+        setTimeout( function() {
+            spinner[0].classList.remove('assignment_spin');
+        1000}, 1000);
+
+    } else {
+        spinner[0].style.opacity = '1';
+        spinner[0].classList.add('assignment_spin');
+
     }
 
 }
@@ -1760,7 +1822,7 @@ function createEmployeeStatsList(database) {
 // sort the people by reassigned values and display them to the leaderboard
 function displayReassignedLeaderboard(stats_list) {
 
-    let leaderboard_length = 10;
+    let leaderboard_length = 4;
 
     let ranked_list = JSON.parse(JSON.stringify(stats_list));
 
@@ -1807,7 +1869,7 @@ function displayReassignedLeaderboard(stats_list) {
 
         leaderboard[0].appendChild(leaderboard_block);
 
-        if(employee >= leaderboard_length) {
+        if(employee == leaderboard_length) {
             break;
         }
     }
@@ -1953,11 +2015,10 @@ function stopReloadSpin() {
 }
 
 
-
-// ? for unequal assignments?
-
 // loading spinners
 
 // full calendar view in requested/assigned columns
 
-// work on visuals alittle
+// refresh on panel should stay at same employee selected in selector
+
+// Make unequal employees in the reassigned column draggable??

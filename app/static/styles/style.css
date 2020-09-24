@@ -736,3 +736,52 @@
     animation-iteration-count: infinite;
     
 }
+
+.assignment_spinner_container {
+    position: absolute;
+    top: 90%;
+    left: 7vw;
+
+}
+
+.assignment_spinner {
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 50%;
+    border: solid 0.5vw rgba(199, 199, 199, 0.301);
+    border-top: solid 0.5vw rgb(255, 255, 255);
+    display: none;
+    transition: opacity .4s;
+
+}
+
+.assignment_spin {
+    animation-name: spin;
+    animation-duration: .8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease;
+    display: block;
+}
+
+.employee_block_spinner {
+    position: absolute;
+    top: 65vh;
+    left: 48vw;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 50%;
+    border: solid 0.5vw rgb(236, 236, 236);
+    border-top: solid 0.5vw rgb(124, 124, 124);
+    z-index: 10;
+    display: none;
+    transition: opacity .4s;
+}
+
+.employee_block_spin {
+    animation-name: spin;
+    animation-duration: .8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease;
+    display: block;
+
+}
