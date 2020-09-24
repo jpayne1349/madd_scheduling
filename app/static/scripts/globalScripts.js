@@ -1667,8 +1667,7 @@ function createStatPanel() {
 function toggleStatPanel(panel, line1, line2) {
     
     if(panel.classList.contains('panel_visible') != true) {
-        // can set loading spinners to turn on here.
-        console.log('make loading spinners');
+        
         loadDatabaseEntries();
 
         let week_div = $('.week_div');
@@ -1698,6 +1697,9 @@ function toggleStatPanel(panel, line1, line2) {
 
 // loads all database information. calls functions to display stat panel
 function loadDatabaseEntries() {
+
+    let reload_icon = $('.reload_icon');
+    reload_icon[0].classList.add('reload_spin');
 
     $.ajax({
         type: "POST",
@@ -1786,11 +1788,9 @@ function createEmployeeStatsList(database) {
         if (employee_object.employee_requested_list.length == employee_object.employee_assigned_list.length ) {
             
             employee_object.equivalent_assignments = true;
-            // here we can call a reassigned days function
+            
             for (let requested = 0; requested < employee_object.employee_requested_list.length; requested ++) {
-                // gotta write something to check the assigned vs requested
-                // for each requested, check all assigned values for a match\
-                // do a string match?
+                
                 let requested_string = employee_object.employee_requested_list[requested][0].toString() + employee_object.employee_requested_list[requested][1] + employee_object.employee_requested_list[requested][2];
                 let compare_values = [];
 
@@ -2013,9 +2013,6 @@ function stopReloadSpin() {
         }, 1000);
     }
 }
-
-
-// loading spinners
 
 // full calendar view in requested/assigned columns
 
