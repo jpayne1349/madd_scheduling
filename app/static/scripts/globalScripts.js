@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.5';
+var version_number = '0.4.6';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1917,59 +1917,59 @@ function reloadColumns(stats_list) {
     //@ts-ignore
     let month_selected = month_selector[0].selectedIndex;
 
+    let day_list = calendarDays(month_selected);
+
     let employee_selector = $('.employee_selector');
     //@ts-ignore
     let employee_selected = employee_selector[0].selectedIndex;
-
 
     let requested_column = $('.requested_column');
     let previous_dates = requested_column.children();
     previous_dates.remove();
 
-    let list_of_requested = [];
-
     let assigned_column = $('.assigned_column');
     let prev_dates = assigned_column.children();
     prev_dates.remove();
 
-    let list_of_assigned = [];
+    let req_blue = 'rgb(151, 214, 253)';
+    let ass_orange = 'rgb(245, 186, 147)';
 
-    for( let index = 0; index < stats_list[employee_selected].employee_requested_list.length; index++) {
-        if (stats_list[employee_selected].employee_requested_list[index][0] == month_selected) { 
-            let requested_day_block = document.createElement('div');
-            requested_day_block.className = 'requested_day_block';
+    for (let day = 0; day < day_list.length; day++) {
+        // create the block
+        let column_day_block = document.createElement('div');
+        column_day_block.className = 'column_day_block';
+        column_day_block.innerText = day_list[day][1].toString();
 
-            let requested_date = document.createElement('div');
-            requested_date.className = 'requested_date';
-            requested_date.innerText = stats_list[employee_selected].employee_requested_list[index][1];
-
-            requested_day_block.appendChild(requested_date);
-
-            list_of_requested.push(requested_day_block);
-            
+        for (let req_day = 0; req_day < stats_list[employee_selected].employee_requested_list.length; req_day++) {
+            let requested_date = stats_list[employee_selected].employee_requested_list[req_day][1];
+            let requested_month = stats_list[employee_selected].employee_requested_list[req_day][0];
+            if(day_list[day][0] == requested_month && day_list[day][1] == requested_date) {
+                column_day_block.style.backgroundColor = req_blue;
+            }
         }
-    }
-    
-    sortDates(list_of_requested, requested_column[0]);
 
-    for (let index = 0; index < stats_list[employee_selected].employee_assigned_list.length; index++) {
-        if (stats_list[employee_selected].employee_assigned_list[index][0] == month_selected) { 
-            let assigned_day_block = document.createElement('div');
-            assigned_day_block.className = 'assigned_day_block';
+        requested_column[0].appendChild(column_day_block);
 
-            let assigned_date = document.createElement('div');
-            assigned_date.className = 'assigned_date';
-            assigned_date.innerText = stats_list[employee_selected].employee_assigned_list[index][1];
-
-            assigned_day_block.appendChild(assigned_date);
-
-            list_of_assigned.push(assigned_day_block);
-            
-        }
     }
 
-    sortDates(list_of_assigned, assigned_column[0]);
 
+    for (let day = 0; day < day_list.length; day++) {
+        // create the block
+        let column_day_block = document.createElement('div');
+        column_day_block.className = 'column_day_block';
+        column_day_block.innerText = day_list[day][1].toString();
+
+        for (let ass_day = 0; ass_day < stats_list[employee_selected].employee_assigned_list.length; ass_day++) {
+            let assigned_date = stats_list[employee_selected].employee_assigned_list[ass_day][1];
+            let assigned_month = stats_list[employee_selected].employee_assigned_list[ass_day][0];
+            if (day_list[day][0] == assigned_month && day_list[day][1] == assigned_date) {
+                column_day_block.style.backgroundColor = ass_orange;
+            }
+        }
+
+        assigned_column[0].appendChild(column_day_block);
+
+    }
 
 }
 
@@ -2014,7 +2014,45 @@ function stopReloadSpin() {
     }
 }
 
-// full calendar view in requested/assigned columns
+// return the days of the month, for the stat columns
+function calendarDays(month) {
+
+    let days_list = [];
+
+    let first_of_month = new Date(2020, month, 1);
+    let first_day = first_of_month.getDay();
+
+    let previous_month_total = day_count[month-1];
+    let current_month_total = day_count[month];
+
+    let last_of_month = new Date(2020, month, current_month_total);
+    let last_day = last_of_month.getDay();
+
+    // if first day = 0, then, its start at 1, if its a 1, means it's monday,
+    // sunday should = previous month total,
+    if (first_day > 0 ) {
+        // take the number, subtract 1, from previous month total, increment into list
+        for (let last = first_day; last > 0; last-- ) {
+            days_list.push([ month-1, previous_month_total - (last - 1)]);
+        }
+    }
+
+    for( let current = 0; current < current_month_total; current++ ) {
+        days_list.push([month, current + 1]);
+    }
+
+    if( last_day != 6 ) {
+        // last_day may equal 3, last day of the week is 6
+        let difference = 6 - last_day
+        for( let next = 0; next < difference; next++ ) {
+            days_list.push([month + 1, next + 1]);
+        }
+    }
+    
+    console.log(days_list);
+    return days_list;
+
+}
 
 // refresh on panel should stay at same employee selected in selector
 

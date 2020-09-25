@@ -501,11 +501,20 @@
     font-size: 1.5vw;
     position: absolute;
     display: inline-block;
-    left: 70vw;
+    left: 82vw;
     top: 4vh;
-    width: 16vw;
+    width: 15vw;
     text-align: center;
 
+}
+
+.reassigned_column {
+    position: absolute;
+    display: inline-block;
+    left: 82vw;
+    top: 7vh;
+    width: 15vw;
+    min-height: 10vh;
 }
 
 .unequal_advisory {
@@ -526,17 +535,6 @@
 
 .show_advisory {
     transform: translate(0, -10vh);
-
-}
-
-.reassigned_column {
-    position: absolute;
-    display: inline-block;
-    left: 70vw;
-    top: 7vh;
-    width: 15vw;
-    min-height: 10vh;
-    
 
 }
 
@@ -612,7 +610,7 @@
 .employee_sel_title {
     position: absolute;
     font-size: 1.5vw;
-    left: 15vw;
+    left: 2vw;
     top: 3.5vh;
     width: 15vw;
     text-align: center;
@@ -621,7 +619,7 @@
 .employee_selector {
     position: absolute;
     display: inline-block;
-    left: 15vw;
+    left: 2vw;
     top: 7vh;
     width: 15vw;
     font-size: 1.5vw;
@@ -631,7 +629,7 @@
 .month_sel_title {
     position: absolute;
     font-size: 1.5vw;
-    left: 15vw;
+    left: 2vw;
     top: 20vh;
     width: 15vw;
     text-align: center;
@@ -640,7 +638,7 @@
 .month_selector {
     position: absolute;
     display: inline-block;
-    left: 15vw;
+    left: 2vw;
     top: 23vh;
     width: 15vw;
     font-size: 1.5vw;
@@ -652,30 +650,29 @@
     position: absolute;
     text-align: center;
     font-size: 1.5vw;
-    left: 35vw;
+    left: 21.5vw;
     top: 7vh;
-    width: 10vw;
+    width: 25vw;
 }
 
 .requested_column {
     position: absolute;
     display: flex;
     flex-wrap: wrap;
-    left: 35vw;
+    left: 21.5vw;
     top: 10vh;
-    max-width: 11vw;
+    max-width: 25vw;
     min-height: 10vh;
    
 }
 
-.requested_date {
+.column_day_block {
     width: 3vw;
     height: 3vw;
-    background-color: rgb(151, 214, 253);
     border: solid 1px rgba(0, 0, 0, 0.527);
-    margin:1px;
-    text-align: center;
-    padding-top: 1vw;
+    margin-left: 2px;
+    margin-bottom: 2px;
+    background-color: rgba(255, 255, 255, 0.342);
 }
 
 .assigned_col_title {
@@ -684,7 +681,7 @@
     font-size: 1.5vw;
     left: 55vw;
     top: 7vh;
-    width: 10vw;
+    width: 25vw;
 }
 
 .assigned_column {
@@ -693,18 +690,8 @@
     flex-wrap: wrap;
     left: 55vw;
     top: 10vh;
-    width: 11vw;
+    width: 25vw;
     min-height: 10vh;
-}
-
-.assigned_date {
-    width: 3vw;
-    height: 3vw;
-    background-color:rgb(245, 186, 147);
-    border: solid 1px rgba(0, 0, 0, 0.527);
-    margin:1px;
-    text-align: center;
-    padding-top: 1vw;
 }
 
 .reload_button {
@@ -785,3 +772,4 @@
     display: block;
 
 }
+
