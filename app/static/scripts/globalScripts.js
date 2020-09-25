@@ -1666,6 +1666,7 @@ function createStatPanel() {
 // move stat panel up and down
 function toggleStatPanel(panel, line1, line2) {
     
+
     if(panel.classList.contains('panel_visible') != true) {
         
         loadDatabaseEntries();
@@ -1711,11 +1712,16 @@ function loadDatabaseEntries() {
     });
 
     function success(database_info) {
-        let employee_stats_list = createEmployeeStatsList(database_info);
+        let employee_selector = $('.employee_selector');
+        //@ts-ignore
+        let selected_employee = employee_selector[0].selectedIndex;
+
+        let employee_stats_list = createEmployeeStatsList(database_info, selected_employee);
         displayReassignedLeaderboard(employee_stats_list);
         reloadColumns(employee_stats_list);
         columnListeners(employee_stats_list);
         stopReloadSpin();
+    
     }
 
     function fail() {
@@ -1744,7 +1750,7 @@ function createMonthOptions(selector) {
 }
 
 // processes the database info, returns a list of employee objects with appropriate attributes
-function createEmployeeStatsList(database) {
+function createEmployeeStatsList(database, last_selected_employee) {
     
     let employee_stats_list = [];
     let employee_selector = $('.employee_selector');
@@ -1765,6 +1771,10 @@ function createEmployeeStatsList(database) {
         let new_option = document.createElement('option');
         new_option.value = index.toString();
         new_option.innerText = employee_object.employee_first_name;
+
+        if ( index == last_selected_employee ) { 
+            new_option.selected = true;
+        }
 
         employee_selector[0].appendChild(new_option);
 
@@ -1816,6 +1826,7 @@ function createEmployeeStatsList(database) {
         }
         employee_stats_list.push(employee_object);
     }
+
     return employee_stats_list;
 }
 
@@ -1904,15 +1915,24 @@ function displayReassignedLeaderboard(stats_list) {
 function columnListeners(stats_list) {
 
     let employee_selector = $('.employee_selector');
-    employee_selector[0].addEventListener('change', function () { reloadColumns(stats_list); });
+
+    employee_selector[0].addEventListener('change', function () { 
+        
+        reloadColumns(stats_list); 
+    
+    });
 
     let month_selector = $('.month_selector');
-    month_selector[0].addEventListener('change', function () { reloadColumns(stats_list); });
+    month_selector[0].addEventListener('change', function () { 
+
+        reloadColumns(stats_list); 
+
+    });
 }
 
 // called on selector change..
 function reloadColumns(stats_list) {
-    
+
     let month_selector = $('.month_selector');
     //@ts-ignore
     let month_selected = month_selector[0].selectedIndex;
@@ -1922,7 +1942,7 @@ function reloadColumns(stats_list) {
     let employee_selector = $('.employee_selector');
     //@ts-ignore
     let employee_selected = employee_selector[0].selectedIndex;
-
+        
     let requested_column = $('.requested_column');
     let previous_dates = requested_column.children();
     previous_dates.remove();
@@ -1973,29 +1993,11 @@ function reloadColumns(stats_list) {
 
 }
 
-// helper function for reloadColumns
-function sortDates(list_of_date_elements, column) {
-
-    list_of_date_elements.sort(function(a, b) {
-        let one = a.childNodes[0].innerText;
-        let two = b.childNodes[0].innerText;
-
-        if (one < two) { return -1; }
-        if (two < one) { return 1; }
-        return 0;
-
-    });
-   
-    for( let each = 0; each < list_of_date_elements.length; each++) {
-        column.appendChild(list_of_date_elements[each]);
-    }
-
-}
-
 // reload button in panel
 function reloadPanelData() {
     let reload_icon = $('.reload_icon');
     reload_icon[0].classList.add('reload_spin');
+
     loadDatabaseEntries();
 }
 
@@ -2049,11 +2051,8 @@ function calendarDays(month) {
         }
     }
     
-    console.log(days_list);
     return days_list;
 
 }
-
-// refresh on panel should stay at same employee selected in selector
 
 // Make unequal employees in the reassigned column draggable??
