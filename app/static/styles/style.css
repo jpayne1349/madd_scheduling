@@ -760,7 +760,7 @@
     border-radius: 50%;
     border: solid 0.5vw rgb(236, 236, 236);
     border-top: solid 0.5vw rgb(124, 124, 124);
-    z-index: 10;
+    z-index: 3;
     display: none;
     transition: opacity .4s;
 }
@@ -774,3 +774,6 @@
 
 }
 
+.dragging {
+    z-index: 100;
+}

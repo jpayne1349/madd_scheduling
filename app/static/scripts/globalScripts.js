@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.6';
+var version_number = '0.4.6 - full calendars added to statistics panel';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1409,8 +1409,7 @@ function duplicate(employee_element, startingTop, startingLeft) {
     
     if (new_element.classList.contains('leaderboard_block')) {
         new_element.classList.remove('leaderboard_block');
-        new_element.classList.add('employee_block');
-
+        
         let children = $(new_element).children();
         children.remove();
         let username = new_element.classList[0];
@@ -1428,8 +1427,11 @@ function duplicate(employee_element, startingTop, startingLeft) {
 
     if( new_element.classList.contains('assigned_employee_block')) {
         new_element.classList.remove('assigned_employee_block');
-        new_element.classList.add('employee_block');
+        
     }
+
+    new_element.classList.add('employee_block');
+    new_element.classList.add('dragging');
 
     new_element.style.top = startingTop;
     new_element.style.left = startingLeft;
@@ -1507,6 +1509,7 @@ function insertElementIntoDiv(div_number, element) {
 
     if( element.classList.contains('employee_block')) {
         element.classList.remove('employee_block');
+        element.classList.remove('dragging');
     }
 
     element.classList.add('assigned_employee_block');
@@ -2082,8 +2085,13 @@ function calendarDays(month) {
 // rewrote drag function. should be doable. have to make a clone, 
 // and set up the clone correctly. ?? 
 
+
+
 // figuring it out. blocks in transit could use a special class
 // that sets their z-index above everything else...
 
 // change the way the leaderboard block turns into an employee_block.. ???
+
+
+// can't be assigned the same day twice!
 
