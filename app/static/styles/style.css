@@ -321,6 +321,7 @@
 
 .assigned_employee_block {
     width: 12vw;
+    height: 3vw;
     z-index: 2;
     border-radius: .6vw .6vw 0.2vw 0.2vw;
     border-bottom: solid 1px black;

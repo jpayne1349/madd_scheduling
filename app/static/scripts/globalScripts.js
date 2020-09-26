@@ -1213,7 +1213,8 @@ function placeAssignmentIntoDiv(first_name, last_name, day_index) {
     days_list[day_index].appendChild(new_block);
     setTimeout( function() { new_block.style.opacity = '1'; } , 200);
 
-    let pos = $(new_block).position();
+    let pos = $(new_block).offset();
+
     new_block.style.top = pos.top + 'px';
     new_block.style.left = pos.left + 'px';
     
@@ -1320,9 +1321,9 @@ function logPointer() {
 }
 
 // sets the appropriate listeners on an element to make it draggable
-function dragElement(elmnt, clone_boolean=false) {
+function dragElement(elmnt, assignment_block=false) {
 
-    var cursorX = 0, cursorY = 0, offsetX = 0, offsetY = 0;
+    var cursorX = 0, cursorY = 0, offset_from_left = 0, offset_from_top = 0;
 
     elmnt.onmousedown = function() { dragMouseDown(event); }
 
@@ -1334,33 +1335,26 @@ function dragElement(elmnt, clone_boolean=false) {
         cursorX = e.clientX;
         cursorY = e.clientY;
 
-        //establish top and left location of object
-        var obj = $(elmnt).position();
+        let elmnt_position = $(elmnt).offset();
 
-        var offset = $(elmnt).offset();
-        console.log(offset.left, offset.top);
-        offsetX = cursorX - obj.left;
-        offsetY = cursorY - obj.top;
-
-        let elmnt_top_position = cursorY - offsetY;
-        let elmnt_left_position = cursorX - offsetX;
+        offset_from_left = cursorX - elmnt_position.left;
+        offset_from_top = cursorY - elmnt_position.top;
 
         let cloned_elmnt = null;
-
-        if(clone_boolean==false) {
-            cloned_elmnt = duplicate(elmnt, elmnt_top_position, elmnt_left_position);
-        } else {
+        cloned_elmnt = duplicate(elmnt, elmnt_position.top, elmnt_position.left);
+        
+        if (assignment_block==true) {
+        
             let day = elmnt.parentElement;
             var index = day.classList[1];
-
-            removeElementFromDiv(elmnt.parentNode, elmnt);
+            $(elmnt).remove();
             deleteAssignmentFromDatabase(elmnt, index, pullDateFromPage());
         }
 
         document.onmouseup = function() { closeDragElement(event, elmnt, cloned_elmnt);  }
         
 
-        document.onmousemove = function() { elementDrag(event, cloned_elmnt, offsetX, offsetY); }
+        document.onmousemove = function() { elementDrag(event, cloned_elmnt, offset_from_left , offset_from_top); }
 
     }
 
@@ -1372,19 +1366,13 @@ function dragElement(elmnt, clone_boolean=false) {
         cursorX = e.clientX;
         cursorY = e.clientY;
 
-        if(clone_boolean == false) {
-            // set the element's new position:
-            clone.style.top = (cursorY - yOffset) + "px";
-            clone.style.left = (cursorX - xOffset) + "px";
-        } else {
-            elmnt.style.top = (cursorY - yOffset) + "px";
-            elmnt.style.left = (cursorX - xOffset) + "px";
-        }
-
+        // set the element's new position:
+        clone.style.top = (cursorY - yOffset) + "px";
+        clone.style.left = (cursorX - xOffset) + "px";
+  
     }
 
     function closeDragElement(e, element, clone) {
-        let dropped_element;
 
         e = e || window.event;
         e.preventDefault();
@@ -1393,25 +1381,18 @@ function dragElement(elmnt, clone_boolean=false) {
         cursorX = e.clientX;
         cursorY = e.clientY;
 
-        if (clone == null) {
-            dropped_element = element;
-        } else {
-            dropped_element = clone;
-        }
-
         let divDroppedOn = getDivOnDrop(cursorX, cursorY);
 
         if(divDroppedOn == null) {
-            dropped_element.style.opacity = '0';
-            deleteElement(dropped_element);
+            clone.style.opacity = '0';
+            deleteElement(clone);
 
         } else {
-            insertElementIntoDiv(divDroppedOn, dropped_element);
+            insertElementIntoDiv(divDroppedOn, clone);
             
-            addAssignmentToDatabase(dropped_element, divDroppedOn, pullDateFromPage());
+            addAssignmentToDatabase(clone, divDroppedOn, pullDateFromPage());
         }
 
-        
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
@@ -1422,9 +1403,36 @@ function dragElement(elmnt, clone_boolean=false) {
 function duplicate(employee_element, startingTop, startingLeft) {
     
     let new_element = employee_element.cloneNode(true);    
-
+    
     let column = $('#employee_column_div');
     column[0].appendChild(new_element);
+    
+    if (new_element.classList.contains('leaderboard_block')) {
+        new_element.classList.remove('leaderboard_block');
+        new_element.classList.add('employee_block');
+
+        let children = $(new_element).children();
+        children.remove();
+        let username = new_element.classList[0];
+        username = '.' + username;
+        let other_assignments = $(username);
+
+        let employee_name = document.createElement('div');
+        employee_name.className = 'employee_name';
+
+        employee_name.innerText = other_assignments[0].innerText;
+
+        new_element.appendChild(employee_name);
+
+    }
+
+    if( new_element.classList.contains('assigned_employee_block')) {
+        new_element.classList.remove('assigned_employee_block');
+        new_element.classList.add('employee_block');
+    }
+
+    new_element.style.top = startingTop;
+    new_element.style.left = startingLeft;
 
     dragElement(new_element, true);
 
@@ -1500,42 +1508,32 @@ function insertElementIntoDiv(div_number, element) {
     if( element.classList.contains('employee_block')) {
         element.classList.remove('employee_block');
     }
-    if (element.classList.contains('leaderboard_block')) {
-        element.classList.remove('leaderboard_block');
-        let children = $(element).children();
-        children.remove();
-        let username = element.classList[0];
-        username = '.' + username;
-        let other_assignments = $(username);
-
-        let employee_name = document.createElement('div');
-        employee_name.className = 'employee_name';
-
-        employee_name.innerText = other_assignments[0].innerText;
-        
-        element.appendChild(employee_name);
-
-    }
 
     element.classList.add('assigned_employee_block');
     element.classList.add('saved_previously');
     $(day_divs[div_number]).append(element);
 
     // setting new element position, so drag works correctly
-    var pos = $(element).position();
+    var pos = $(element).offset();
 
     element.style.top = pos.top + 'px';
     element.style.left = pos.left + 'px';
 }
 
 // removes element from parent, called on block pickup
-function removeElementFromDiv(element_parent, element) {
+function removeElementFromDiv(element_parent, element, top, left) {
     let day_divs = $('.day_div');
     let day_index = element_parent.classList[1];
     
+    let employee_column = $('.employee_column_div');
+
     //$(day_divs[day_index]).remove(element);
+    $(employee_column).append(element);
     element.classList.remove('assigned_employee_block');
     element.classList.add('employee_block');
+
+    element.style.top = top;
+    element.style.left = left;
     
 
 }
@@ -1621,7 +1619,7 @@ function createStatPanel() {
 
     let unequal_advisory = document.createElement('div');
     unequal_advisory.className = 'unequal_advisory';
-    unequal_advisory.innerText = 'Question marks in the Reassigned Leaderboard indicate unequal assignment values.' + '\n' + 'Employee may have more assigned days than requested days, or vice versa.';
+    unequal_advisory.innerText = 'Question marks in the Reassigned Leaderboard indicate unequal assignment values.' + '\n' + 'Employee may have more requested days than assigned days, or vice versa.';
 
     let employee_sel_title = document.createElement('div');
     employee_sel_title.className = 'employee_sel_title';
@@ -2081,7 +2079,11 @@ function calendarDays(month) {
 }
 
 // Make unequal employees in the reassigned column draggable??
+// rewrote drag function. should be doable. have to make a clone, 
+// and set up the clone correctly. ?? 
 
-// ... basically, i need to rewrite my drag function with the .offset
-// because that gives you the position on the actual screen, not relative to a parent element.
+// figuring it out. blocks in transit could use a special class
+// that sets their z-index above everything else...
+
+// change the way the leaderboard block turns into an employee_block.. ???
 
