@@ -1336,6 +1336,9 @@ function dragElement(elmnt, clone_boolean=false) {
 
         //establish top and left location of object
         var obj = $(elmnt).position();
+
+        var offset = $(elmnt).offset();
+        console.log(offset.left, offset.top);
         offsetX = cursorX - obj.left;
         offsetY = cursorY - obj.top;
 
@@ -1494,7 +1497,26 @@ function deleteElement(element) {
 function insertElementIntoDiv(div_number, element) {
     let day_divs = $('.day_div');
 
-    element.classList.remove('employee_block');
+    if( element.classList.contains('employee_block')) {
+        element.classList.remove('employee_block');
+    }
+    if (element.classList.contains('leaderboard_block')) {
+        element.classList.remove('leaderboard_block');
+        let children = $(element).children();
+        children.remove();
+        let username = element.classList[0];
+        username = '.' + username;
+        let other_assignments = $(username);
+
+        let employee_name = document.createElement('div');
+        employee_name.className = 'employee_name';
+
+        employee_name.innerText = other_assignments[0].innerText;
+        
+        element.appendChild(employee_name);
+
+    }
+
     element.classList.add('assigned_employee_block');
     element.classList.add('saved_previously');
     $(day_divs[div_number]).append(element);
@@ -1858,7 +1880,8 @@ function displayReassignedLeaderboard(stats_list) {
         let employee_username = ranked_list[employee].employee_first_name.slice(0, 1) + ranked_list[employee].employee_last_name;
 
         let leaderboard_block = document.createElement('div');
-        leaderboard_block.className = 'leaderboard_block';
+        leaderboard_block.className = employee_username;
+        leaderboard_block.classList.add('leaderboard_block');
         leaderboard_block.style.backgroundColor = getParentColor(employee_username);    
 
         let leaderboard_name = document.createElement('div');
@@ -1869,10 +1892,12 @@ function displayReassignedLeaderboard(stats_list) {
         let reassigned_number = document.createElement('div');
         reassigned_number.className = 'reassigned_number';
         
+        // here is where we could create a draggable object
         if (ranked_list[employee].equivalent_assignments == true ) {
             reassigned_number.innerText = ranked_list[employee].reassigned_count;
         } else {
             reassigned_number.innerText = '?';
+            dragElement(leaderboard_block, false);
         }
 
         leaderboard_block.appendChild(leaderboard_name);
@@ -2056,3 +2081,7 @@ function calendarDays(month) {
 }
 
 // Make unequal employees in the reassigned column draggable??
+
+// ... basically, i need to rewrite my drag function with the .offset
+// because that gives you the position on the actual screen, not relative to a parent element.
+
