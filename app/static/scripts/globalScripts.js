@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.6 - full calendars added to statistics panel';
+var version_number = '0.4.7 - unequal assignments holders now draggable from statistics panel';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1897,6 +1897,16 @@ function displayReassignedLeaderboard(stats_list) {
         if (ranked_list[employee].equivalent_assignments == true ) {
             reassigned_number.innerText = ranked_list[employee].reassigned_count;
         } else {
+            let drag_icon_div = document.createElement('div');
+            drag_icon_div.className = 'drag_icon_div';
+
+            let drag_icon = document.createElement('img');
+            drag_icon.className = 'drag_icon';
+            drag_icon.src = 'static/drag_icon.png';
+
+            drag_icon_div.appendChild(drag_icon);
+            leaderboard_block.appendChild(drag_icon_div);
+
             reassigned_number.innerText = '?';
             dragElement(leaderboard_block, false);
         }
@@ -1905,6 +1915,10 @@ function displayReassignedLeaderboard(stats_list) {
         leaderboard_block.appendChild(reassigned_number);
 
         leaderboard[0].appendChild(leaderboard_block);
+
+        let block_position = $(leaderboard_block).offset();
+        leaderboard_block.style.left = block_position.left + 'px';
+        leaderboard_block.style.top = block_position.top + 'px';
 
         if(employee == leaderboard_length) {
             break;
@@ -2085,13 +2099,8 @@ function calendarDays(month) {
 // rewrote drag function. should be doable. have to make a clone, 
 // and set up the clone correctly. ?? 
 
-
-
-// figuring it out. blocks in transit could use a special class
-// that sets their z-index above everything else...
-
 // change the way the leaderboard block turns into an employee_block.. ???
-
+// need to set the movable leaderboard block top and left on creation, to help drag start
 
 // can't be assigned the same day twice!
 

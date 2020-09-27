@@ -777,3 +777,13 @@
 .dragging {
     z-index: 100;
 }
+
+
+.drag_icon {
+    width: 2vw;
+    height: inherit;
+    border: solid 1px rgba(0, 0, 0, 0.26);
+    border-radius: 5px;
+    transform: translate(-1px, -1px);
+    cursor: move;
+}
