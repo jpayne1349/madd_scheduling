@@ -221,6 +221,8 @@ function createClearButton() {
 }
 
 // builds html objects for creating the employee
+// TODO: can add a check for employees made already? to hide the form automatically on start?
+// for now will just hide on start
 function createForm() {
 
     let form_div = document.createElement('div');
@@ -287,6 +289,8 @@ function createForm() {
     form_div.appendChild(create_button);
     
     page.appendChild(form_div);
+
+    toggleForm();
 
 }
 
