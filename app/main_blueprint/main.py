@@ -146,13 +146,36 @@ def populate():
             # here is where we duplicate each assignment into an 'assigned' one
             assigned_assignment = Assignment(month=assignment.month, day=assignment.day, year=assignment.year, classification='assigned', user_id=assignment.employee.id)
             db.session.add(assigned_assignment)
-            response_list[i].append(assignment.employee.username)
+            response_list[i].append([assignment.employee.first_name, assignment.employee.last_name])
     
     db.session.commit()
     
     json_response = json.dumps(response_list)
 
     return json_response
+
+@main_blueprint.route('/clearAssignmentsFromWeek/', methods=['POST'])
+def clear():
+    date_object = request.get_json()
+    year = date_object[2]
+    
+    # each day of the week
+    for day in range(7):
+        # month array is '0' index, with 7 slots in it
+        month = date_object[0][day]
+        # day array is '0' index, with 7 slots in it
+        day = date_object[1][day]
+
+        assignments_for_this_day = Assignment.query.filter(Assignment.classification == 'assigned').filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
+        
+        for assignment in assignments_for_this_day:
+            print(f'deletiing {assignment}')
+            db.session.delete(assignment)
+           
+    
+    db.session.commit()
+    
+    return 'clear assignments run'
 
 @main_blueprint.route('/loadDatabaseEntries/', methods=['POST'])
 def loadEverything():

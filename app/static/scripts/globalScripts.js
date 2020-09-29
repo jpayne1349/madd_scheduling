@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.7 - unequal assignments holders now draggable from statistics panel';
+var version_number = '0.4.8 - bug fix on populate button. Addition of Clear button in assigned view';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -32,14 +32,7 @@ var employeeList = [];
           - avoid employees with same first and last name?
                 duplicate lastnames, should display username instead of lastname?
           - 
-          - set a max # of employees at 15
-          -
-          - track the # of days signed up for in the current week. all should be 3.  
-          -
-          - stat panel, with a Reassigned count column on the right
-                and an individual stat selector on the left
-                like a scroll wheel or whatever to pick the person you want to see.
-
+          - clear button in assigned view, to delete all
 
           UI Work:
           -
@@ -49,6 +42,8 @@ var employeeList = [];
 
           BUGS:
           - after deletion of employee, blocks do not shift. new blocks not placed in empty spot
+          - picking up from day shifts other assignments up, but does not update their top/left attributes..
+          - populate button not displaying assignments, database side working correctly.
 
 */
 
@@ -201,6 +196,27 @@ function createWeekTemplate() {
     //page.appendChild(next_div);
 
     return day_div_array;
+
+}
+
+function createClearButton() {
+
+    let clear_div = document.createElement('div');
+    clear_div.className = 'clear_div';
+    
+
+    let clear_button = document.createElement('div');
+    clear_button.className = 'clear_button';
+    clear_button.innerText = 'Clear';
+    clear_button.addEventListener('click', clearAssignmentsFromWeek );
+
+    clear_div.appendChild(clear_button);
+    clear_div.style.opacity = '0';
+
+    let page = $('#main_content');
+    page[0].appendChild(clear_div);
+
+    setTimeout(function () { clear_div.style.opacity = '1'; }, 600);
 
 }
 
@@ -449,6 +465,7 @@ function changeViews() {
         }
 
         createPopulateButton();
+        createClearButton();
         
     } else {
         button[0].className = 'requested';
@@ -459,8 +476,12 @@ function changeViews() {
 
         let populate_div = $('.populate_div');
         populate_div[0].style.opacity = '0';
-        
+
+        let clear_div = $('.clear_div');
+        clear_div[0].style.opacity = '0';
+
         deleteElement(populate_div);
+        deleteElement(clear_div);
         
         for (let i = 0; i < day_divs.length; i++) {
             day_divs[i].style.backgroundColor = 'rgba(135, 206, 250, 0.787)';
@@ -524,8 +545,10 @@ function populateFromRequested() {
             for (let i = 0; i < assignment_list.length; i++) {
                 for (let j = 0; j < assignment_list[i].length; j++) {
                     if (assignment_list[i][j] != 'None') {
-                        // produces the username here
-                        placeAssignmentIntoDiv(assignment_list[i][j], i);
+                        let first_name = assignment_list[i][j][0];
+                        let last_name = assignment_list[i][j][1];
+
+                        placeAssignmentIntoDiv(first_name, last_name, i);
                     }
                 }
             }
@@ -536,6 +559,49 @@ function populateFromRequested() {
         }
 
     }
+}
+
+// ajax request to clear the current week of all assignments
+function clearAssignmentsFromWeek() {
+
+    if(confirm('This will delete everything from the assigned view, for this week.')) {
+
+        let date = pullDateFromPage();
+
+        let date_object = getDates(date);
+
+        let month_array = date_object.month_array;
+        let day_array = date_object.date_array;
+        let year = date_object.year;
+
+        let packet_array = [month_array, day_array, year]
+
+        let json_packet = JSON.stringify(packet_array)
+
+        $.ajax({
+            type: "POST",
+            url: '/clearAssignmentsFromWeek/',
+            data: json_packet,
+            success: success,
+            error: fail,
+            contentType: 'application/json',
+            //dataType: 'json'
+        });
+
+        function success() {
+            let current_date = pullDateFromPage();
+            changeAssignments(current_date);
+        }
+
+        function fail() {
+            console.log('clear assignmentz ajax failed');
+        }
+
+        
+    }
+
+   
+
 }
 
 // AJAX request to server to load and display saved employees
@@ -1142,7 +1208,7 @@ function loadAssignmentsFromDatabase(date) {
         for( let i = 0; i < assignment_list.length; i++) {
             // assignment loop
             for( let j = 0; j < assignment_list[i].length; j++) {
-                // if none, do something with the first and last name
+                // if not none, do something with the first and last name
                 if( assignment_list[i][j] != 'None') {
                     let first_name = assignment_list[i][j][0];
                     let last_name = assignment_list[i][j][1];
@@ -2095,12 +2161,4 @@ function calendarDays(month) {
 
 }
 
-// Make unequal employees in the reassigned column draggable??
-// rewrote drag function. should be doable. have to make a clone, 
-// and set up the clone correctly. ?? 
-
-// change the way the leaderboard block turns into an employee_block.. ???
-// need to set the movable leaderboard block top and left on creation, to help drag start
-
-// can't be assigned the same day twice!
 

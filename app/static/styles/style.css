@@ -58,8 +58,35 @@
 
     text-align: center;
     transform: translate(0,.3vw);
-    
-    
+    user-select: none;
+     
+}
+
+.clear_div {
+
+    z-index: 2;
+    position: absolute;
+    left: 68.4vw;
+    top: 3vw;
+    font-size: 1.6vw;
+    background-color: rgba(250, 135, 135, 0.5);
+    width: 12vw;
+    height: 2.5vw;
+    border: solid 1px rgba(0, 0, 0, 0.527);
+    border-radius: 0.6vw 0.6vw 0 0;
+    transition: opacity 0.4s;
+    cursor: pointer;
+}
+
+.clear_div:hover {
+    background-color: rgba(250, 135, 135);
+}
+
+.clear_button {
+
+    text-align: center;
+    transform: translate(0,.3vw);
+    user-select: none;
 }
 
 .change_views_div {
