@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.8 - bug fix on populate button. Addition of Clear button in assigned view';
+var version_number = '0.4.9 - visual changes to stat panel. scrollable leaderboard';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1692,7 +1692,8 @@ function createStatPanel() {
 
     let unequal_advisory = document.createElement('div');
     unequal_advisory.className = 'unequal_advisory';
-    unequal_advisory.innerText = 'Question marks in the Reassigned Leaderboard indicate unequal assignment values.' + '\n' + 'Employee may have more requested days than assigned days, or vice versa.';
+    unequal_advisory.style.opacity = '0';
+    unequal_advisory.innerText = 'Question marks in the Reassigned Leaderboard indicate unequal assignment values. Employee may have more requested days than assigned days, or vice versa. These blocks are draggable to help correct the problem without moving the stat panel back down. :)';
 
     let employee_sel_title = document.createElement('div');
     employee_sel_title.className = 'employee_sel_title';
@@ -1926,7 +1927,7 @@ function createEmployeeStatsList(database, last_selected_employee) {
 // sort the people by reassigned values and display them to the leaderboard
 function displayReassignedLeaderboard(stats_list) {
 
-    let leaderboard_length = 4;
+    //let leaderboard_length = 4;
 
     let ranked_list = JSON.parse(JSON.stringify(stats_list));
 
@@ -1958,7 +1959,7 @@ function displayReassignedLeaderboard(stats_list) {
         let leaderboard_name = document.createElement('div');
         leaderboard_name.className = 'leaderboard_name';
         leaderboard_name.classList.add(employee_username);
-        leaderboard_name.innerText = ranked_list[employee].employee_full_name;
+        leaderboard_name.innerText = ranked_list[employee].employee_first_name;
         
         let reassigned_number = document.createElement('div');
         reassigned_number.className = 'reassigned_number';
@@ -1990,20 +1991,24 @@ function displayReassignedLeaderboard(stats_list) {
         leaderboard_block.style.left = block_position.left + 'px';
         leaderboard_block.style.top = block_position.top + 'px';
 
-        if(employee == leaderboard_length) {
-            break;
-        }
+        // if(employee == leaderboard_length) {
+        //     break;
+        // }
     }
     
     let advisory = $('.unequal_advisory');
     for( let employee = 0; employee < ranked_list.length; employee++) {
         if(ranked_list[employee].equivalent_assignments == false) {
-            advisory[0].classList.add('show_advisory');
+            // advisory[0].classList.add('show_advisory');
+            advisory[0].style.opacity = '1';
             break;
         }
         if( employee == (ranked_list.length - 1)) {
-            if (advisory[0].classList.contains('show_advisory')) {
-                advisory[0].classList.remove('show_advisory');
+            // if (advisory[0].classList.contains('show_advisory')) {
+            //     advisory[0].classList.remove('show_advisory');
+            // }
+            if( advisory[0].style.opacity == '1') {
+                advisory[0].style.opacity = '0';
             }
         }
     }

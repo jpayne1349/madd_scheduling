@@ -542,7 +542,9 @@
     left: 82vw;
     top: 7vh;
     width: 15vw;
-    min-height: 10vh;
+    max-height: 30vh;
+    overflow: auto;
+    text-align: center;
 }
 
 .unequal_advisory {
@@ -551,23 +553,21 @@
     font-size: 1.5vw;
     background-color: rgb(226, 225, 225);
     height: 10vw;
-    width: 70vw;
-    top: 100%;
-    left: 15vw;
-    padding:10px;
-    border-radius: 35px;
-    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 7px 10px rgb(61, 61, 61);
+    width: 15vw;
+    top: 20vh;
+    left: 2vw;
+    padding:2px;
+    border-radius: 15px;
+    transition: opacity 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 3px 5px rgb(61, 61, 61);
+    overflow: auto;
+    user-select: none;
+    
     
 }
 
-.show_advisory {
-    transform: translate(0, -10vh);
-
-}
-
 .leaderboard_block {
-    width: inherit;
+    width: 12vw;
     height: 2vw;
     margin: 5px;
     border: solid 1px rgba(0, 0, 0, 0.26);
@@ -578,12 +578,13 @@
 
 .leaderboard_name {
     text-align: center;
-    margin-top: 2px;
-    height: 1.6vw;
+    /* margin-top: 2px; */
+    height: 1.7vw;
     margin-left: 5px;
     font-size: 1.5vw;
-    min-width: 10vw;
+    min-width: 5vw;
     background-color: rgba(255, 255, 255, 0.794);
+    border-radius: 0 0 5px 5px;
 }
 
 .reassigned_number {
@@ -652,13 +653,14 @@
     width: 15vw;
     font-size: 1.5vw;
     border-radius: 5px;
+    text-align-last: center;
 }
 
 .month_sel_title {
     position: absolute;
     font-size: 1.5vw;
     left: 2vw;
-    top: 20vh;
+    top: 12vh;
     width: 15vw;
     text-align: center;
 }
@@ -667,11 +669,11 @@
     position: absolute;
     display: inline-block;
     left: 2vw;
-    top: 23vh;
+    top: 15.5vh;
     width: 15vw;
     font-size: 1.5vw;
     border-radius: 5px;
-
+    text-align-last: center;
 }
 
 .requested_col_title {
@@ -679,7 +681,7 @@
     text-align: center;
     font-size: 1.5vw;
     left: 21.5vw;
-    top: 7vh;
+    top: 5.5vh;
     width: 25vw;
 }
 
@@ -688,7 +690,7 @@
     display: flex;
     flex-wrap: wrap;
     left: 21.5vw;
-    top: 10vh;
+    top: 8.5vh;
     max-width: 25vw;
     min-height: 10vh;
    
@@ -708,7 +710,7 @@
     text-align: center;
     font-size: 1.5vw;
     left: 55vw;
-    top: 7vh;
+    top: 5.5vh;
     width: 25vw;
 }
 
@@ -717,7 +719,7 @@
     display: flex;
     flex-wrap: wrap;
     left: 55vw;
-    top: 10vh;
+    top: 8.5vh;
     width: 25vw;
     min-height: 10vh;
 }
