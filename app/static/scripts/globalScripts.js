@@ -32,7 +32,7 @@ var employeeList = [];
           - avoid employees with same first and last name?
                 duplicate lastnames, should display username instead of lastname?
           - 
-          - clear button in assigned view, to delete all
+          - 
 
           UI Work:
           -
@@ -43,7 +43,7 @@ var employeeList = [];
           BUGS:
           - after deletion of employee, blocks do not shift. new blocks not placed in empty spot
           - picking up from day shifts other assignments up, but does not update their top/left attributes..
-          - populate button not displaying assignments, database side working correctly.
+          - 
 
 */
 
@@ -1140,6 +1140,25 @@ function addAssignmentToDatabase(element, day_index, date) {
 
 }
 
+// shifted blocks in day need location reset for drag
+function recalculateAssignmentLocations(day_index) {
+
+    let day_divs = $('.day_div');
+    let day = day_divs[day_index];
+
+    let day_children = $(day).children();
+
+    for( let child = 0; child < day_children.length; child++ ) {
+        if( day_children[child].classList.contains('assigned_employee_block')) {
+            let assignment = day_children[child];
+
+            let new_offset = $(assignment).offset();
+            assignment.style.top = new_offset.top + 'px';
+            assignment.style.left = new_offset.left + 'px';
+        }
+    }
+}
+
 // deletes an assignment from the database that is moved out of a day
 function deleteAssignmentFromDatabase(element, day_index, date) {
     if(element.classList.contains('saved_previously')) {
@@ -1169,7 +1188,7 @@ function deleteAssignmentFromDatabase(element, day_index, date) {
         });
 
         function success(response) {
-            //console.log(response);
+            recalculateAssignmentLocations(day_index);
         }
 
         function fail() {
