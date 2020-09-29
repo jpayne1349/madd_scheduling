@@ -367,6 +367,7 @@ function createEmployeeColumn() {
 
     let employee_block_spinner = document.createElement('div');
     employee_block_spinner.className = 'employee_block_spinner';
+    employee_block_spinner.classList.add('.employee_block_spin');
 
     employee_column_div.appendChild(employee_block_spinner);
 
@@ -398,6 +399,7 @@ function reloadEmployeeColumn() {
     //grab all the shit.
     let all_employees = $('#employee_column_div');
     all_employees[0].remove();
+
     employeeList = [];
     secondRowCount = 0;
     thirdRowCount = 0;
@@ -913,8 +915,8 @@ function editEmployeeInDatabase(old_employee, new_first_name, new_last_name) {
 
     function success(response) {
         setTimeout(function() {
-            let useless_date = pullDateFromPage();
-            changeAssignments(useless_date);
+            let current_date = pullDateFromPage();
+            changeAssignments(current_date);
         } , 2000);
 
         reloadEmployeeColumn();

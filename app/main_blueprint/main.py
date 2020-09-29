@@ -41,7 +41,7 @@ def create_employee():
 def load_employee():
     # needs to get database info and send in response
     employees = Employee.query.all()
-    
+
     employee_list = []
     for index, employee  in enumerate(employees):
         # individual dictionaries created for employee and placed into a list
@@ -116,7 +116,7 @@ def load_assignment():
     date_object = request.get_json()
     year = date_object[2]
     classification = date_object[3]
-    
+
     response_list = []
     for i in range(7):
         response_list.append([])
