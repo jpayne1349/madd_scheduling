@@ -104,8 +104,10 @@ function initialDisplay(date_object) {
 
 // add version element
 function addVersionNumber() {
-    let version_div = document.createElement('div');
+    let version_div = document.createElement('a');
     version_div.className = 'version';
+    version_div.target = '_blank';
+    version_div.href = 'https://github.com/jpayne1349/madd_scheduling/commits/master';
     version_div.innerText = 'v'+ version_number;
 
     let page = document.getElementById('main_content');
