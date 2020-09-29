@@ -5,9 +5,11 @@ from flask import Blueprint, render_template, flash, request
 
 from flask import current_app as app
 
+from flask_login import login_required, current_user
+
 from app import db
 
-from app.models import Employee, Assignment
+from app.models import Employee, Assignment, User
 
 import json
 
@@ -19,6 +21,7 @@ main_blueprint = Blueprint('main_blueprint', __name__)
 
 
 @main_blueprint.route('/', methods=['GET','POST'])
+@login_required
 def homepage():
     return render_template('homepage.html')
 
@@ -30,7 +33,8 @@ def create_employee():
     # Employee class attributes called first_name last_name username
     new_employee = Employee(first_name = employee_dict['firstName'],
                             last_name = employee_dict['lastName'],
-                            username = employee_dict['username'])
+                            username = employee_dict['username'],
+                            user_id = current_user.id )
     db.session.add(new_employee)
     db.session.commit()
 
@@ -40,7 +44,7 @@ def create_employee():
 @main_blueprint.route('/loadEmployee/', methods=['POST'])
 def load_employee():
     # needs to get database info and send in response
-    employees = Employee.query.all()
+    employees = Employee.query.filter(Employee.user_id == current_user.id).all()
 
     employee_list = []
     for index, employee  in enumerate(employees):
@@ -58,9 +62,9 @@ def delete_employee():
     
     employee_dict = request.get_json()
     # can just search by username for now. works unless people share last name and first initial
-    stored_employee = Employee.query.filter(Employee.username == employee_dict['username']).first()
+    stored_employee = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.username == employee_dict['username']).first()
     
-    employees_assignments = Assignment.query.filter(Assignment.employee == stored_employee).all()
+    employees_assignments = Assignment.query.filter(Assignment.user_id == current_user.id).filter(Assignment.employee == stored_employee).all()
     for assignment in employees_assignments:
         db.session.delete(assignment)
 
@@ -76,7 +80,7 @@ def edit_employee():
 
     old_first, old_last, new_first, new_last = data[0], data[1], data[2], data[3]
 
-    employee_to_edit = Employee.query.filter(Employee.first_name == old_first).filter(Employee.last_name == old_last).first()
+    employee_to_edit = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.first_name == old_first).filter(Employee.last_name == old_last).first()
 
     employee_to_edit.first_name = new_first
     employee_to_edit.last_name = new_last
@@ -90,9 +94,9 @@ def add_assignment():
     # create the Assignment row in the table
     assignment_list = request.get_json()    
     username, month, day, year, classification = assignment_list[0], assignment_list[1], assignment_list[2], assignment_list[3], assignment_list[4]
-    employee = Employee.query.filter(Employee.username == username).first()
-    # month, day, year, shift_type, user_id
-    new_assignment = Assignment(month=month, day=day, year=year, classification=classification, user_id=employee.id)
+    employee = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.username == username).first()
+    # month, day, year, shift_type, employee_id
+    new_assignment = Assignment(month=month, day=day, year=year, classification=classification, employee_id=employee.id, user_id=current_user.id)
     
     db.session.add(new_assignment)
     db.session.commit()
@@ -103,9 +107,9 @@ def add_assignment():
 def delete_assignment():
     assignment_list = request.get_json()    
     username, month, day, year, classification = assignment_list[0], assignment_list[1], assignment_list[2], assignment_list[3], assignment_list[4]
-    employee = Employee.query.filter(Employee.username == username).first()
-    # month, day, year, shift_type, user_id
-    assignment = Assignment.query.filter(Assignment.user_id == employee.id).filter(Assignment.day == day).filter(Assignment.month == month).filter(Assignment.year == year).filter(Assignment.classification == classification).first()
+    employee = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.username == username).first()
+    # month, day, year, shift_type, employee_id
+    assignment = Assignment.query.filter(Assignment.user_id == current_user.id).filter(Assignment.employee_id == employee.id).filter(Assignment.day == day).filter(Assignment.month == month).filter(Assignment.year == year).filter(Assignment.classification == classification).first()
     db.session.delete(assignment)
     db.session.commit()
 
@@ -122,7 +126,7 @@ def load_assignment():
         response_list.append([])
         month = date_object[0][i]
         day = date_object[1][i]
-        assignments = Assignment.query.filter(Assignment.classification == classification).filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
+        assignments = Assignment.query.filter(Assignment.user_id == current_user.id).filter(Assignment.classification == classification).filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
         for assignment in assignments:
             response_list[i].append([assignment.employee.first_name, assignment.employee.last_name])
             
@@ -141,10 +145,10 @@ def populate():
         response_list.append([])
         month = date_object[0][i]
         day = date_object[1][i]
-        assignments = Assignment.query.filter(Assignment.classification == 'requested').filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
+        assignments = Assignment.query.filter(Assignment.user_id == current_user.id).filter(Assignment.classification == 'requested').filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
         for assignment in assignments:
             # here is where we duplicate each assignment into an 'assigned' one
-            assigned_assignment = Assignment(month=assignment.month, day=assignment.day, year=assignment.year, classification='assigned', user_id=assignment.employee.id)
+            assigned_assignment = Assignment(month=assignment.month, day=assignment.day, year=assignment.year, classification='assigned', employee_id=assignment.employee.id, user_id=current_user.id)
             db.session.add(assigned_assignment)
             response_list[i].append([assignment.employee.first_name, assignment.employee.last_name])
     
@@ -166,7 +170,7 @@ def clear():
         # day array is '0' index, with 7 slots in it
         day = date_object[1][day]
 
-        assignments_for_this_day = Assignment.query.filter(Assignment.classification == 'assigned').filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
+        assignments_for_this_day = Assignment.query.filter(Assignment.user_id == current_user.id).filter(Assignment.classification == 'assigned').filter(Assignment.month == month).filter(Assignment.day == day).filter(Assignment.year == year).all()
         
         for assignment in assignments_for_this_day:
             print(f'deletiing {assignment}')
@@ -182,7 +186,7 @@ def loadEverything():
     # make the queries to send all the information to javascript?
     packet = []
 
-    employees = Employee.query.all()
+    employees = Employee.query.filter(Employee.user_id == current_user.id).all()
 
     for employee in employees:
         entry = []
@@ -193,7 +197,7 @@ def loadEverything():
         
         assignments = []
 
-        ass_query = Assignment.query.filter(Assignment.user_id == employee.id).all()
+        ass_query = Assignment.query.filter(Assignment.user_id == current_user.id).filter(Assignment.employee_id == employee.id).all()
         for assignment in ass_query:
             ass = []
             ass.append(assignment.month)

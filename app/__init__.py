@@ -29,9 +29,9 @@ def create_app():
     print('')
     print('')
 
-    #login_manager.init_app(app)
+    login_manager.init_app(app)
 
-    #login_manager.login_view = 'authorization_bp.login_page'
+    login_manager.login_view = 'login_blueprint.login'
 
     # this is voodoo magic...
     # all 'pieces' of the app must be brought in inside this context function
@@ -39,9 +39,11 @@ def create_app():
     with app.app_context():
 
         from .main_blueprint import main # giving the app access to this folder and this file
+        from .login_blueprint import login
 
         app.register_blueprint(main.main_blueprint)  # registering the blueprint inside that file
-
+        app.register_blueprint(login.login_blueprint)
+        
         from . import models  # the period means this directory, import those two modules
 
         return app

@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.4.9 - visual changes to stat panel. scrollable leaderboard';
+var version_number = '0.5 - first rollout of login page / multiple app users';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -29,9 +29,16 @@ var employeeList = [];
     Notes:
 
         feature ideas:
-          - avoid employees with same first and last name?
-                duplicate lastnames, should display username instead of lastname?
-          - 
+          - PTO blocks can just have a border color of their regular background color
+            how to set the PTO attribute? must be a new database entry
+            could be called 'type' of assignment,
+            probably should look different on the assigned view, so it doesn't get confused with people that 
+            are actually working
+
+          - RO entries could just be visual at start, but need to be used in a future calculation
+            I like the idea of little orbs at the bottom of the day_div of who has requested off.
+
+          - need a sign in page. 
           - 
 
           UI Work:
@@ -41,8 +48,8 @@ var employeeList = [];
           -
 
           BUGS:
-          - after deletion of employee, blocks do not shift. new blocks not placed in empty spot
-          - picking up from day shifts other assignments up, but does not update their top/left attributes..
+          - 
+          - 
           - 
 
 */

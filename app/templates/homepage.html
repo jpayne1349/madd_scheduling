@@ -2,6 +2,22 @@
 
 {% extends "header_footer.html" %}
 
+{% block head %}
+
+
+{{super()}}
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+
+<link rel="icon" type="image/x-icon" href="{{ url_for('static' , filename='ic.ico') }}">
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/scripts/jquery3.5.1.js"></script>
+    <script src="/static/scripts/schedulerScripts.js"></script>
+{% endblock %}
 
 {% block content %}
 
