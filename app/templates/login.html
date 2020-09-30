@@ -27,23 +27,25 @@
 
 <div id='login_content'>
 
+    <h1 class='sign_in_title'>Sign in to Madd Scheduling</h1>
+
+    <div class='form_outline'>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class='label_div'> {{ form.username.label(class='username_label') }} </div>
+
+            <div class='input_div' > {{ form.username(size=32, class='username_input') }} </div>
+
+            <div class='label_div' > {{ form.password.label(class='password_label') }} </div>
+
+            <div class='input_div' > {{ form.password(size=32 , class= 'password_input') }} </div>
+
+            <!-- <div> {{ form.remember_me() }} {{ form.remember_me.label }} </div> -->
+
+            <div> {{ form.submit(class='submit_button') }}</div>
+        </form>
+    </div>
 </div>
-
-
-<h1>Sign In</h1>
-<form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.username.label }}<br>
-        {{ form.username(size=32) }}
-    </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(size=32) }}
-    </p>
-    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-    <p>{{ form.submit() }}</p>
-</form>
-
 
 {% endblock %}

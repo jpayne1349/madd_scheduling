@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.5 - first rollout of login page / multiple app users';
+var version_number = '0.5.1 - update to sign in page visuals';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -38,7 +38,8 @@ var employeeList = [];
           - RO entries could just be visual at start, but need to be used in a future calculation
             I like the idea of little orbs at the bottom of the day_div of who has requested off.
 
-          - need a sign in page. 
+          - logout button
+          - username shown in a tab? 
           - 
 
           UI Work:
