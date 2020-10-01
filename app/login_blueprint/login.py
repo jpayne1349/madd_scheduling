@@ -1,6 +1,6 @@
 
 
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 from flask import current_app as app
 
@@ -35,9 +35,9 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            print('Invalid username or password')
+            flash('Incorrect username or password')
             return redirect(url_for('login_blueprint.login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user)
         return redirect(url_for('main_blueprint.homepage'))
 
     return render_template('login.html', form=form)

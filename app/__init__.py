@@ -32,6 +32,7 @@ def create_app():
     login_manager.init_app(app)
 
     login_manager.login_view = 'login_blueprint.login'
+    login_manager.login_message = None
 
     # this is voodoo magic...
     # all 'pieces' of the app must be brought in inside this context function

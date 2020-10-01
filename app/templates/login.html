@@ -29,6 +29,16 @@
 
     <h1 class='sign_in_title'>Sign in to Madd Scheduling</h1>
 
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li class='flashed_message'>{{ message }}</li>
+        {% endfor %}
+    </ul>
+        {% endif %}
+        {% endwith %}
+
     <div class='form_outline'>
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
