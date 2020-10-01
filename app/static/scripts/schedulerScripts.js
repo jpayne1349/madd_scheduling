@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.5.2 - possible fix for form resubmission issue';
+var version_number = 'Oct-2-2020 : v0.5.2 - possible fix for form resubmission issue';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -116,7 +116,7 @@ function addVersionNumber() {
     version_div.className = 'version';
     version_div.target = '_blank';
     version_div.href = 'https://github.com/jpayne1349/madd_scheduling/commits/master';
-    version_div.innerText = 'v'+ version_number;
+    version_div.innerText = version_number;
 
     let page = document.getElementById('main_content');
     page.appendChild(version_div);
