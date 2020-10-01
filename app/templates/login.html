@@ -43,13 +43,29 @@
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
 
-            <div class='label_div'> {{ form.username.label(class='username_label') }} </div>
+            <div class='label_div'> {{ form.username.label(class='username_label') }} 
+
+                {% for error in form.username.errors %}
+                <span class = 'validation_message'> - required </span>
+                {% endfor %}
+
+            </div>
 
             <div class='input_div' > {{ form.username(size=32, class='username_input') }} </div>
+            
+            
+            
+            <div class='label_div' > {{ form.password.label(class='password_label') }} 
 
-            <div class='label_div' > {{ form.password.label(class='password_label') }} </div>
+                {% for error in form.password.errors %}
+                <span class='validation_message'> - required </span>
+                {% endfor %}
+
+            </div>
 
             <div class='input_div' > {{ form.password(size=32 , class= 'password_input') }} </div>
+
+            
 
             <!-- <div> {{ form.remember_me() }} {{ form.remember_me.label }} </div> -->
 
