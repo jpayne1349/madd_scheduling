@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = '0.5.1 - update to sign in page visuals';
+var version_number = '0.5.2 - possible fix for form resubmission issue';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -49,8 +49,8 @@ var employeeList = [];
           -
 
           BUGS:
-          - 
-          - 
+          - empty employees and pulling up the stat panel throw an error, create a check for zero employees
+          -     check could also help with the employee form hiding
           - 
 
 */

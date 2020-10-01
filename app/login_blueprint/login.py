@@ -40,6 +40,9 @@ def login():
         login_user(user)
         return redirect(url_for('main_blueprint.homepage'))
 
+    if request.method == 'POST':
+        return redirect(url_for('main_blueprint.homepage'))
+
     return render_template('login.html', form=form)
 
 

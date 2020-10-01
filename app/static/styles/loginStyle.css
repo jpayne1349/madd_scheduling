@@ -129,8 +129,18 @@ ul {
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
-    padding: 10px 32px;
+    padding: 15px 20px;
     background-color: rgb(250, 250, 250);
     border-radius: 5px;
     border: 1px solid #e1e4e8;
+}
+
+.new_account_link, .new_account_link:visited {
+    text-decoration: none;
+    color: rgba(0, 0, 255, 0.664);
+}
+
+.new_account_link:hover {
+    text-decoration:underline;
+
 }
