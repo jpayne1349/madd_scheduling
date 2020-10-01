@@ -51,9 +51,7 @@
 
             </div>
 
-            <div class='input_div' > {{ form.username(size=32, class='username_input') }} </div>
-            
-            
+            <div class='input_div' > {{ form.username(size=32, class='username_input', autofocus=true) }} </div>
             
             <div class='label_div' > {{ form.password.label(class='password_label') }} 
 
@@ -65,13 +63,18 @@
 
             <div class='input_div' > {{ form.password(size=32 , class= 'password_input') }} </div>
 
-            
-
             <!-- <div> {{ form.remember_me() }} {{ form.remember_me.label }} </div> -->
 
             <div> {{ form.submit(class='submit_button') }}</div>
+
         </form>
     </div>
+
+    <div class='new_account_div'>
+        New to the project?
+        <a href = 'https://www.instagram.com/brohammm/?hl=en' > Create an account. </a>
+    </div>
+
 </div>
 
 {% endblock %}

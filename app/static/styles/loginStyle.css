@@ -120,3 +120,17 @@ ul {
     color: rgba(146, 0, 0, 0.52);
     font-size: 13px;
 }
+
+.new_account_div {
+    font-family: 'Segoe UI Regular';
+    font-size: 14px;
+    text-align: center;
+    width: 308px;
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 32px;
+    background-color: rgb(250, 250, 250);
+    border-radius: 5px;
+    border: 1px solid #e1e4e8;
+}
