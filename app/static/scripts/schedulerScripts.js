@@ -300,7 +300,7 @@ function createForm() {
     
     page.appendChild(form_div);
 
-    toggleForm();
+    //toggleForm();
 
 }
 

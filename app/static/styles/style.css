@@ -253,27 +253,28 @@
     width: 0.2vw;
     height: 1.5vw;
     background-color: grey;
-    transform: translate(1.65vw,.2vw) rotate(45deg);
+    transform: translate(1vw,0vw) rotate(45deg);
 }
 
 .form_arrow_two {
     width: 0.2vw;
     height: 1.5vw;
     background-color: grey;
-    transform: translate(0.52vw, .2vw) rotate(-45deg);
+    transform: translate(0.8vw, 1vw) rotate(-45deg);
 }
 
 .hide_form_arrow {
-    
-    transform: translate(0.2vw,0.7vw) rotate(90deg);
+    position: absolute;
     cursor: pointer;
-    transition: transform 1s ease-out 0.9s;
-
+    transition: all 1s ease-out 0.9s;
     display: inline-flex;
-    width: 2.6vw;
-    height: 2vw;
+    margin-top: 5px;
+    left: 22vw;
+    top: 0;
+    width: 2vw;
+    height: 2.6vw;
     border: solid 1px rgba(0, 0, 0, 0.527);
-    border-radius: 0.1vw 0.1vw 0.6vw 0.6vw ;
+    border-radius: 0.6vw 0.1vw 0.1vw 0.6vw ;
     background-color: rgba(0, 0, 0, 0.098);
 }
 
@@ -285,10 +286,13 @@
     transform: translate(-90vw, 0);
 
 }
-
+    
 .move_arrow {
-    transform: translate(-23.3vw, -3vw) rotateY(-180deg) rotate(90deg);
-
+    position: absolute;
+    left: 1px;
+    top: -60px;
+    transform: rotate(180deg);
+    
 }
 
 .create_button, .employee_form {
