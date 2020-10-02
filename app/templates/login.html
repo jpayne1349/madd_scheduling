@@ -40,7 +40,7 @@
         {% endwith %}
 
     <div class='form_outline'>
-        <form action="" method="post" novalidate>
+        <form action="" method="post" novalidate onsubmit='return validateLoginForm();'>
             {{ form.hidden_tag() }}
 
             <div class='label_div'> {{ form.username.label(class='username_label') }} 

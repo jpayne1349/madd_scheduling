@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = 'Oct-2-2020 : v0.5.2 - possible fix for form resubmission issue';
+var version_number = 'Oct-2-2020 : v0.5.3 - bug fix for stat panel opening with no employees made yet';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1842,8 +1842,8 @@ function loadDatabaseEntries() {
         let selected_employee = employee_selector[0].selectedIndex;
 
         let employee_stats_list = createEmployeeStatsList(database_info, selected_employee);
-        displayReassignedLeaderboard(employee_stats_list);
         reloadColumns(employee_stats_list);
+        displayReassignedLeaderboard(employee_stats_list);
         columnListeners(employee_stats_list);
         stopReloadSpin();
     
@@ -2078,6 +2078,14 @@ function columnListeners(stats_list) {
 
 // called on selector change..
 function reloadColumns(stats_list) {
+    let reassigned_column = $('.reassigned_column');
+    if(stats_list.length == 0) {
+        reassigned_column[0].innerText = 'No employees created';
+        return
+
+    } else {
+        reassigned_column[0].innerText = '';
+    }
 
     let month_selector = $('.month_selector');
     //@ts-ignore
