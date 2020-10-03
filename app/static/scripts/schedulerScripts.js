@@ -350,7 +350,7 @@ function toggleForm() {
     } else {
         toggle_arrow[0].classList.add('move_arrow');
         let offset = $(toggle_arrow[0]).offset();
-        toggle_arrow[0].style.transform = 'translate(-' + offset.left + 'px, 0px) rotate(180deg)';
+        toggle_arrow[0].style.transform = 'translate(-' + offset.left + 'px, -60px) rotate(180deg)';
         
     }
     
