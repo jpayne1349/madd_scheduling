@@ -77,7 +77,8 @@ class Employee {
 
 // calls getDates and weekTemplate to display the information
 function initialDisplay(date_object) {
-    
+
+    checkForFirstTimeUser();
     addVersionNumber();
     createViewToggle();
     let week_template = createWeekTemplate();
@@ -107,6 +108,33 @@ function initialDisplay(date_object) {
     setTimeout( function() {
         loadAssignmentsFromDatabase(date_object);
     }, 100);
+
+}
+
+// need to make a few database checks before displaying the page
+function checkForFirstTimeUser() {
+
+    $.ajax({
+        type: "POST",
+        url: '/loadEmployee/',
+        success: success,
+        error: fail,
+        contentType: 'application/json',
+        dataType: 'json'
+    });
+
+    function success(employee_list) {
+
+        if ( employee_list.length == 0 ) {
+            window.addEventListener('load', function() {
+                toggleForm();
+            });
+        }
+    }
+
+    function fail() {
+        console.log('inital load employees ajax failed');
+    }
 
 }
 
@@ -300,7 +328,7 @@ function createForm() {
     
     page.appendChild(form_div);
 
-    //toggleForm();
+    toggleForm();
 
 }
 
@@ -625,6 +653,7 @@ function loadEmployeesFromDatabase() {
 
     toggleEmployeeSpinner();
 
+    
     $.ajax({
         type: "POST",
         url: '/loadEmployee/',
@@ -637,7 +666,7 @@ function loadEmployeesFromDatabase() {
     function success(employee_list) {
         
         toggleEmployeeSpinner();
-
+    
         for( let count = 0; count < employee_list.length; count++) {
 
             // parse out all employees received
@@ -652,6 +681,7 @@ function loadEmployeesFromDatabase() {
             displayEmployeeObject(loaded_employee);
 
         }
+    
     }
 
     function fail() {
