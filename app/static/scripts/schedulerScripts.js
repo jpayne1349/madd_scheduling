@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = 'Oct-2-2020 : v0.5.3 - bug fix for stat panel opening with no employees made yet';
+var version_number = 'Oct-3-2020 : v0.5.4 - bug fix for form hide on low res screens ... -_- fritz';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -125,7 +125,7 @@ function checkForFirstTimeUser() {
 
     function success(employee_list) {
 
-        if ( employee_list.length == 0 ) {
+        if ( employee_list.length != 0 ) {
             window.addEventListener('load', function() {
                 toggleForm();
             });
@@ -328,7 +328,9 @@ function createForm() {
     
     page.appendChild(form_div);
 
-    toggleForm();
+    
+
+    //toggleForm();
 
 }
 
@@ -341,7 +343,16 @@ function toggleForm() {
 
     the_inputs[0].classList.toggle('form_hide');
     the_button[0].classList.toggle('form_hide');
-    toggle_arrow[0].classList.toggle('move_arrow');
+    
+    if( toggle_arrow[0].classList.contains('move_arrow')) {
+        toggle_arrow[0].classList.remove('move_arrow');
+        toggle_arrow[0].style.transform = 'translate(0px, 0px) rotate(0deg)';
+    } else {
+        toggle_arrow[0].classList.add('move_arrow');
+        let offset = $(toggle_arrow[0]).offset();
+        toggle_arrow[0].style.transform = 'translate(-' + offset.left + 'px, 0px) rotate(180deg)';
+        
+    }
     
     for(let i = 0; i < day_divs.length; i++) {
         day_divs[i].classList.toggle('form_hidden');
