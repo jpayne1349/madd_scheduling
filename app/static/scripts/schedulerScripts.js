@@ -24,7 +24,6 @@ var thirdRowCount = 0;
 // this will have mulitple purposes, for now it will help display the employee blocks
 var employeeList = [];
 
-
 /*
     Notes:
 
@@ -51,7 +50,7 @@ var employeeList = [];
           BUGS:
           - empty employees and pulling up the stat panel throw an error, create a check for zero employees
           -     check could also help with the employee form hiding
-          - 
+          - reassigned leaderboard not showing up on employee selector change
 
 */
 
@@ -126,9 +125,16 @@ function checkForFirstTimeUser() {
     function success(employee_list) {
 
         if ( employee_list.length != 0 ) {
+
+            const once = {
+                once: true
+            };
+
             window.addEventListener('load', function() {
-                toggleForm();
-            });
+
+                toggleForm(true); // this may need to be changed  to hide always..
+
+            }, once);
         }
     }
 
@@ -268,7 +274,7 @@ function createForm() {
 
     let hide_form_arrow = document.createElement('div');
     hide_form_arrow.className = 'hide_form_arrow';
-    hide_form_arrow.addEventListener('click', function () { toggleForm(); });
+    hide_form_arrow.addEventListener('click', function () { toggleForm(false); });
 
     let form_arrow_one = document.createElement('div');
     form_arrow_one.className = 'form_arrow_one';
@@ -335,29 +341,43 @@ function createForm() {
 }
 
 // moves the form and arrow back and forth, and expands the day_divs
-function toggleForm() {
+function toggleForm(firstTime) {
     let the_inputs = $('.employee_form');
     let the_button = $('.create_button');
     let toggle_arrow = $('.hide_form_arrow');
     let day_divs = $('.day_div');
 
-    the_inputs[0].classList.toggle('form_hide');
-    the_button[0].classList.toggle('form_hide');
-    
-    if( toggle_arrow[0].classList.contains('move_arrow')) {
-        toggle_arrow[0].classList.remove('move_arrow');
-        toggle_arrow[0].style.transform = 'translate(0px, 0px) rotate(0deg)';
+    if( firstTime == false ) {
+        the_inputs[0].classList.toggle('form_hide');
+        the_button[0].classList.toggle('form_hide');
+        
+        if( toggle_arrow[0].classList.contains('move_arrow')) {
+            toggle_arrow[0].classList.remove('move_arrow');
+            toggle_arrow[0].style.transform = 'translate(0px, 0px) rotate(0deg)';
+        } else {
+            toggle_arrow[0].classList.add('move_arrow');
+            let offset = $(toggle_arrow[0]).offset();
+            toggle_arrow[0].style.transform = 'translate(-' + offset.left + 'px, -60px) rotate(180deg)';
+            
+        }
+        
+        for(let i = 0; i < day_divs.length; i++) {
+            day_divs[i].classList.toggle('form_hidden');
+        }
     } else {
+
+        the_inputs[0].classList.toggle('form_hide');
+        the_button[0].classList.toggle('form_hide');
+        
         toggle_arrow[0].classList.add('move_arrow');
         let offset = $(toggle_arrow[0]).offset();
         toggle_arrow[0].style.transform = 'translate(-' + offset.left + 'px, -60px) rotate(180deg)';
-        
+
+        for (let i = 0; i < day_divs.length; i++) {
+            day_divs[i].classList.toggle('form_hidden');
+        }
+
     }
-    
-    for(let i = 0; i < day_divs.length; i++) {
-        day_divs[i].classList.toggle('form_hidden');
-    }
-    
 }
 
 // displays error messages for empty forms, and invalid characters
@@ -1001,7 +1021,7 @@ function createEmployee() {
         let new_employee = new Employee(first_name, last_name);
 
         clearForm();
-
+        
         addEmployeeToDatabase(new_employee);
 
         displayEmployeeObject(new_employee);
@@ -2121,12 +2141,8 @@ function columnListeners(stats_list) {
 function reloadColumns(stats_list) {
     let reassigned_column = $('.reassigned_column');
     if(stats_list.length == 0) {
-        reassigned_column[0].innerText = 'No employees created';
         return
-
-    } else {
-        reassigned_column[0].innerText = '';
-    }
+    } 
 
     let month_selector = $('.month_selector');
     //@ts-ignore
