@@ -42,6 +42,20 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     margin: 0 2px 0 0;
     transition: height 3s, background-color 1s;
+    border-radius: 8px;
+}
+
+.requested_off_drawer {
+    position: absolute;
+    height: 0;
+    border-bottom: 2vw solid rgba(199, 199, 199, 0.746);
+    border-left: 1vw solid transparent;
+    border-right: 1vw solid transparent;
+    /* box-shadow: 0 0 4px 4px rgba(199, 199, 199, 0.787); */
+    width: 10vw;
+    /* background-color: rgba(199, 199, 199, 0.787); */
+    bottom: 0.5px;
+    border-radius: 0 0 8px 8px;
 }
 
 .populate_div {
@@ -398,6 +412,7 @@
     font-size: 1vw;
     background-color: rgba(71, 102, 128, 0.287);
     user-select: none;
+    box-shadow: 0 0.5px 1px rgb(173, 173, 173) inset;
 }
 
 .dropdownButton {

@@ -213,8 +213,12 @@ function createWeekTemplate() {
         day_name.className = 'day_name';
         day_name.innerText = dayNames[i];
 
+        let requested_off_drawer = document.createElement('div');
+        requested_off_drawer.className = 'requested_off_drawer';
+        
         day_header.appendChild(day_name);
         day_div.appendChild(day_header);
+        day_div.appendChild(requested_off_drawer);
         week_div.appendChild(day_div);
         
         day_div_array.push(day_div);
@@ -368,7 +372,7 @@ function toggleForm(firstTime) {
 
         the_inputs[0].classList.toggle('form_hide');
         the_button[0].classList.toggle('form_hide');
-        
+
         toggle_arrow[0].classList.add('move_arrow');
         let offset = $(toggle_arrow[0]).offset();
         toggle_arrow[0].style.transform = 'translate(-' + offset.left + 'px, -60px) rotate(180deg)';
