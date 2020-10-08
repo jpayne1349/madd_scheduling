@@ -1554,15 +1554,42 @@ function dragElement(elmnt, assignment_block=false) {
             deleteElement(clone);
 
         } else {
-            insertElementIntoDiv(divDroppedOn, clone);
-            
-            addAssignmentToDatabase(clone, divDroppedOn, pullDateFromPage());
+            if( divDroppedOn[1] == 'false' ) {
+                insertElementIntoDiv(divDroppedOn[0], clone);
+                
+                addAssignmentToDatabase(clone, divDroppedOn[0], pullDateFromPage());
+            } else {
+                // function call to insertIntoRequestedOffDrawer
+                insertIntoRequestedOffDrawer(divDroppedOn[0], clone);
+
+            }
         }
 
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
     }
+}
+
+// to change classes on drop into drawer
+function insertIntoRequestedOffDrawer(day_index, element) {
+    let drawers = $('.requested_off_drawer');
+
+    let drawer_dropped_on = drawers[day_index];
+
+    if (element.classList.contains('employee_block')) {
+        element.classList.remove('employee_block');
+        element.classList.remove('dragging');
+    }
+    
+    let first_name = element.innerText;
+
+    element.innerText = first_name.slice(0,1);
+
+    element.classList.add('requested_off_bubble');
+
+    $(drawer_dropped_on).append(element);
+
 }
 
 // returns a copy of the element passed in. copy is draggable as a clone.
@@ -1614,15 +1641,26 @@ function getDivOnDrop(pointerX, pointerY) {
     let divPositions = dayDivPositions();
     let divSize = getDayDivSize();
 
-    for(let i = 0; i < divPositions.length; i++) {
-    let xStart = divPositions[i][0];
-    let yStart = divPositions[i][1];
+    let requested_off_height = divSize.height * .07;
 
-    let xEnd = xStart + divSize.width;
-    let yEnd = yStart + divSize.height;
-    
+    for(let i = 0; i < divPositions.length; i++) {
+        
+        let return_list = [];
+
+        let xStart = divPositions[i][0];
+        let yStart = divPositions[i][1];
+
+        let xEnd = xStart + divSize.width;
+        let yEnd = yStart + divSize.height;
+
         if (pointerX >= xStart && pointerX <= xEnd && pointerY >= yStart && pointerY <= yEnd) {
-            return i;
+            return_list.push(i);
+            if ( pointerY <= yEnd && pointerY >= (yEnd - requested_off_height) ) {
+                return_list.push('true');
+            } else {
+                return_list.push('false');
+            }
+            return return_list;
         }
     }
 }

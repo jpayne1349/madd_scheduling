@@ -56,6 +56,19 @@
     /* background-color: rgba(199, 199, 199, 0.787); */
     bottom: 0.5px;
     border-radius: 0 0 8px 8px;
+    display: inline-flex;
+
+}
+
+.requested_off_bubble {
+
+    height: 2vw;
+    width: 2vw;
+    border-radius: 50%;
+    font-size: 1.5vw;
+    margin-right: 2px;
+
+
 }
 
 .populate_div {
