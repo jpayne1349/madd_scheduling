@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = 'Oct-3-2020 : v0.5.4 - bug fix for form hide on low res screens ... -_- fritz';
+var version_number = 'Oct-8-2020 : v0.5.5 - requested off drawer, and duplicate checking';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -1554,21 +1554,62 @@ function dragElement(elmnt, assignment_block=false) {
             deleteElement(clone);
 
         } else {
-            if( divDroppedOn[1] == 'false' ) {
-                insertElementIntoDiv(divDroppedOn[0], clone);
-                
-                addAssignmentToDatabase(clone, divDroppedOn[0], pullDateFromPage());
-            } else {
-                // function call to insertIntoRequestedOffDrawer
-                insertIntoRequestedOffDrawer(divDroppedOn[0], clone);
+            // if (checkForDuplicate(divDroppedOn[0], clone)) {
+                if( divDroppedOn[1] == 'false' ) {
+                    if (checkForDuplicate(divDroppedOn[0], clone)) {
 
-            }
+                    insertElementIntoDiv(divDroppedOn[0], clone);
+                    
+                    addAssignmentToDatabase(clone, divDroppedOn[0], pullDateFromPage());
+
+                    } else {
+                        clone.style.opacity = '0';
+                        deleteElement(clone);
+                    }
+                } else {
+                    // function call to insertIntoRequestedOffDrawer
+                    insertIntoRequestedOffDrawer(divDroppedOn[0], clone);
+
+                }
         }
 
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
     }
+}
+
+// returns false if duplicate found, based on username match from classList
+function checkForDuplicate(day_div_number, element) {
+    // grab all the usernames created thus far
+    let created_employees = $('.employee_block');
+
+    let usernames = [];
+    for( let each = 0; each < created_employees.length; each++ ) {
+        usernames.push(created_employees[each].classList[1]);
+    }
+
+    let day_divs = $('.day_div');
+    
+    let div_elements = $(day_divs[day_div_number]).children();
+    let users_in_div = [];
+
+    for( let each = 0; each < div_elements.length; each++ ) {
+        for ( let username = 0; username < usernames.length; username++ ) {
+            if( div_elements[each].classList.contains(usernames[username])) {
+                users_in_div.push(usernames[username]);
+            }
+        }
+    }
+    
+    for( let i = 0; i < users_in_div.length; i++ ) {
+        if(element.classList.contains(users_in_div[i])) {
+            return false;
+        }
+    }
+
+    return true;
+    
 }
 
 // to change classes on drop into drawer
@@ -1585,8 +1626,11 @@ function insertIntoRequestedOffDrawer(day_index, element) {
     let first_name = element.innerText;
 
     element.innerText = first_name.slice(0,1);
-
+    
+    let bg_color = element.style.backgroundColor;
     element.classList.add('requested_off_bubble');
+
+    element.style.background = 'radial-gradient(circle at 0.66vw 0.66vw,' + bg_color + ', rgb(75, 75, 75))';
 
     $(drawer_dropped_on).append(element);
 
