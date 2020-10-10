@@ -1554,7 +1554,7 @@ function dragElement(elmnt, assignment_block=false) {
             deleteElement(clone);
 
         } else {
-            // if (checkForDuplicate(divDroppedOn[0], clone)) {
+            
                 if( divDroppedOn[1] == 'false' ) {
                     if (checkForDuplicate(divDroppedOn[0], clone)) {
 
@@ -1582,11 +1582,12 @@ function dragElement(elmnt, assignment_block=false) {
 // returns false if duplicate found, based on username match from classList
 function checkForDuplicate(day_div_number, element) {
     // grab all the usernames created thus far
-    let created_employees = $('.employee_block');
+    //let created_employees = $('.employee_block');
 
     let usernames = [];
-    for( let each = 0; each < created_employees.length; each++ ) {
-        usernames.push(created_employees[each].classList[1]);
+    for( let each = 0; each < employeeList.length; each++ ) {
+        usernames.push(employeeList[each].classList[1]); 
+
     }
 
     let day_divs = $('.day_div');
@@ -1604,6 +1605,7 @@ function checkForDuplicate(day_div_number, element) {
     
     for( let i = 0; i < users_in_div.length; i++ ) {
         if(element.classList.contains(users_in_div[i])) {
+            console.log('duplicate found');
             return false;
         }
     }
@@ -1640,7 +1642,7 @@ function insertIntoRequestedOffDrawer(day_index, element) {
 function duplicate(employee_element, startingTop, startingLeft) {
     
     let new_element = employee_element.cloneNode(true);    
-    
+
     let column = $('#employee_column_div');
     column[0].appendChild(new_element);
     
