@@ -1556,7 +1556,7 @@ function dragElement(elmnt, assignment_block=false) {
         } else {
             
                 if( divDroppedOn[1] == 'false' ) {
-                    if (checkForDuplicate(divDroppedOn[0], clone)) {
+                    if (checkForDuplicate(divDroppedOn[0], clone, false)) {
 
                     insertElementIntoDiv(divDroppedOn[0], clone);
                     
@@ -1567,9 +1567,14 @@ function dragElement(elmnt, assignment_block=false) {
                         deleteElement(clone);
                     }
                 } else {
-                    // function call to insertIntoRequestedOffDrawer
-                    insertIntoRequestedOffDrawer(divDroppedOn[0], clone);
-
+                    if (checkForDuplicate(divDroppedOn[0], clone, true)) {// function call to insertIntoRequestedOffDrawer
+                    
+                        insertIntoRequestedOffDrawer(divDroppedOn[0], clone);
+                    
+                    } else {
+                        clone.style.opacity = '0';
+                        deleteElement(clone);
+                    }
                 }
         }
 
@@ -1580,7 +1585,7 @@ function dragElement(elmnt, assignment_block=false) {
 }
 
 // returns false if duplicate found, based on username match from classList
-function checkForDuplicate(day_div_number, element) {
+function checkForDuplicate(day_div_number, element, requested_off) {
     // grab all the usernames created thus far
     //let created_employees = $('.employee_block');
 
@@ -1591,8 +1596,15 @@ function checkForDuplicate(day_div_number, element) {
     }
 
     let day_divs = $('.day_div');
+    let requested_off_drawers = $('.requested_off_drawer');
+
+    if( requested_off == true ) {
+        var div_elements = $(requested_off_drawers[day_div_number]).children();
+    } else {
+        var div_elements = $(day_divs[day_div_number]).children();
+    }
+ 
     
-    let div_elements = $(day_divs[day_div_number]).children();
     let users_in_div = [];
 
     for( let each = 0; each < div_elements.length; each++ ) {
