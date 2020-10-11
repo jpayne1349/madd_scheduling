@@ -1505,6 +1505,8 @@ function dragElement(elmnt, assignment_block=false) {
             elmnt.style.opacity = '0';
             deleteElement(elmnt);
 
+            // deleteRequestedOff from database
+
             return;
         }
 

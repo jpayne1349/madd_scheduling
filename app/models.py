@@ -53,4 +53,14 @@ class Assignment(db.Model):
     def __repr__(self):
         return f'{self.classification}: {self.month} {self.day} {self.year} Employee: {self.employee_id} , User: {self.user_id}'
 
-    
+
+class Requested_Off(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.Integer, index=True)
+    day = db.Column(db.Integer, index=True)
+    year = db.Column(db.Integer, index=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return f'{self.employee_id} - R.O. {self.month} {self.day} {self.year}'
