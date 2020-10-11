@@ -37,6 +37,7 @@ class Employee(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     assignments = db.relationship('Assignment', backref='employee', lazy='dynamic')
+    requested_offs = db.relationship('Requested_Off', backref='employee', lazy='dynamic')
 
     def __repr__(self):
         return f'Employee: {self.first_name} {self.last_name}, User: {self.user_id}'

@@ -106,6 +106,7 @@ function initialDisplay(date_object) {
 
     setTimeout( function() {
         loadAssignmentsFromDatabase(date_object);
+        loadRequestedOff(date_object);
     }, 100);
 
 }
@@ -1102,7 +1103,10 @@ function changeAssignments(date) {
         deleteElement(assignments[i]);
     }
     // call loadAssignments with the new date
-    setTimeout(function () { loadAssignmentsFromDatabase(date); } , 400);
+    setTimeout(function () { 
+        loadAssignmentsFromDatabase(date);
+        loadRequestedOff(date); 
+    } , 400);
 
 }
 
@@ -1344,6 +1348,108 @@ function toggleAssignmentSpinner() {
 
 }
 
+// ajax to add to database
+function addRequestedOff(element, day_index, date) {
+    
+    let username = element.classList[0];
+
+    let date_object = getDates(date);
+
+    let month = date_object.month_array[day_index];
+    let day = date_object.date_array[day_index];
+    let year = date_object.year;
+
+    let packet_array = [username, month, day, year]
+
+    let json_to_send = JSON.stringify(packet_array)
+
+    $.ajax({
+        type: "POST",
+        url: '/addRequestedOff/',
+        data: json_to_send,
+        success: success,
+        error: fail,
+        contentType: 'application/json'
+    });
+
+    function success(response) {
+        //console.log(response);
+    }
+
+    function fail() {
+        console.log('addRequestedOff() failed');
+    }
+
+}
+
+// ajax to delete from database
+function deleteRequestedOff(element, day_index, date) {
+
+    let username = element.classList[0];
+
+    let date_object = getDates(date);
+
+    let month = date_object.month_array[day_index];
+    let day = date_object.date_array[day_index];
+    let year = date_object.year;
+
+    let packet_array = [username, month, day, year]
+
+    let json_to_send = JSON.stringify(packet_array)
+
+    $.ajax({
+        type: "POST",
+        url: '/deleteRequestedOff/',
+        data: json_to_send,
+        success: success,
+        error: fail,
+        contentType: 'application/json'
+    });
+
+    function success(response) {
+        //console.log(response);
+    }
+
+    function fail() {
+        console.log('deleteAssignmentFromDatabase() failed');
+    }
+
+}
+
+// ajax to load from database
+function loadRequestedOff(date) {
+
+    let date_object = getDates(date);
+
+    let month_array = date_object.month_array;
+    let date_array = date_object.date_array;
+    let year = date_object.year;
+
+    let data_array = [month_array, date_array, year];
+    let json_packet = JSON.stringify(data_array);
+
+    $.ajax({
+        type: "POST",
+        url: '/loadRequestedOffs/',
+        data: json_packet,
+        success: success,
+        error: fail,
+        contentType: 'application/json',
+        dataType: 'json'
+    });
+
+    function success(requested_list) {
+        // create requested bubbles from return
+        console.log(requested_list);
+        
+    }
+
+    function fail() {
+        console.log('load assignmentz ajax failed');
+    }
+
+}
+
 // simple. pulls the div out with a certain class. prob not necessary
 function findParentBlock(block_list) {
     for(let each = 0; each < block_list.length; each++) {
@@ -1502,11 +1608,13 @@ function dragElement(elmnt, assignment_block=false) {
         cursorY = e.clientY;
 
         if ( elmnt.classList.contains('requested_off_bubble')) {
+            let day = elmnt.parentElement;
+            var index = day.classList[1];
+            deleteRequestedOff(elmnt, index, pullDateFromPage());
+
             elmnt.style.opacity = '0';
             deleteElement(elmnt);
-
-            // deleteRequestedOff from database
-
+        
             return;
         }
 
@@ -1656,6 +1764,8 @@ function insertIntoRequestedOffDrawer(day_index, element) {
     element.style.background = 'radial-gradient(circle at 0.66vw 0.66vw,' + bg_color + ', rgb(75, 75, 75))';
 
     $(drawer_dropped_on).append(element);
+
+    addRequestedOff(element, day_index, pullDateFromPage());
 
 }
 

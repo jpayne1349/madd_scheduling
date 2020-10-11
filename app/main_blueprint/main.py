@@ -9,7 +9,7 @@ from flask_login import login_required, current_user
 
 from app import db
 
-from app.models import Employee, Assignment, User
+from app.models import Employee, Assignment, User, Requested_Off
 
 import json
 
@@ -214,3 +214,52 @@ def loadEverything():
     json_packet = json.dumps(packet)
 
     return json_packet
+
+@main_blueprint.route('/addRequestedOff/', methods=['POST'])
+def add_requested():
+    # create the Assignment row in the table
+    data_list = request.get_json()    
+    username, month, day, year = data_list[0], data_list[1], data_list[2], data_list[3]
+    employee = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.username == username).first()
+    # month, day, year, shift_type, employee_id
+    new_requested_off = Requested_Off(month=month, day=day, year=year, employee_id=employee.id, user_id=current_user.id)
+
+    db.session.add(new_requested_off)
+    db.session.commit()
+
+    return f'add requested off route run'
+
+@main_blueprint.route('/deleteRequestedOff/', methods=['POST'])
+def delete_requested():
+
+    data_list = request.get_json()    
+    username, month, day, year = data_list[0], data_list[1], data_list[2], data_list[3]
+    employee = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.username == username).first()
+    # month, day, year, employee_id
+    requested_off = Requested_Off.query.filter(Requested_Off.user_id == current_user.id).filter(Requested_Off.employee_id == employee.id).filter(Requested_Off.day == day).filter(Requested_Off.month == month).filter(Requested_Off.year == year).first()
+    db.session.delete(requested_off)
+    db.session.commit()
+
+    return f'delete assignment return'
+
+@main_blueprint.route('/loadRequestedOffs/', methods=['POST'])
+def load_requested():
+
+    date_object = request.get_json()
+    year = date_object[2]
+
+    response_list = []
+    for i in range(7):
+        response_list.append([])
+        month = date_object[0][i]
+        day = date_object[1][i]
+        requested_offs = Requested_Off.query.filter(Requested_Off.user_id == current_user.id).filter(Requested_Off.month == month).filter(Requested_Off.day == day).filter(Requested_Off.year == year).all()
+        for requested_off in requested_offs:
+            response_list[i].append([requested_off.employee.first_name, requested_off.employee.last_name])
+            
+    if response_list == None:
+        response_list.append('None')
+
+    json_response = json.dumps(response_list)
+
+    return json_response
