@@ -1501,6 +1501,13 @@ function dragElement(elmnt, assignment_block=false) {
         cursorX = e.clientX;
         cursorY = e.clientY;
 
+        if ( elmnt.classList.contains('requested_off_bubble')) {
+            elmnt.style.opacity = '0';
+            deleteElement(elmnt);
+
+            return;
+        }
+
         let elmnt_position = $(elmnt).offset();
 
         offset_from_left = cursorX - elmnt_position.left;
@@ -1674,14 +1681,15 @@ function duplicate(employee_element, startingTop, startingLeft) {
 
         new_element.appendChild(employee_name);
 
+        new_element.classList.add('employee_block');
     }
 
     if( new_element.classList.contains('assigned_employee_block')) {
         new_element.classList.remove('assigned_employee_block');
-        
-    }
 
-    new_element.classList.add('employee_block');
+        new_element.classList.add('employee_block');
+    }
+    
     new_element.classList.add('dragging');
 
     new_element.style.top = startingTop;
