@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = 'Oct-8-2020 : v0.5.5 - requested off drawer, and duplicate checking';
+var version_number = 'Oct-13-2020 : v0.5.6 - requested off bubbles added to the database, all functions seem to be working';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -570,6 +570,7 @@ function changeViews() {
 
     let useless_date = pullDateFromPage();
     changeAssignments(useless_date);
+    changeRequestedOffs(useless_date);
 
 }
 
@@ -1044,6 +1045,7 @@ function previousWeek() {
     
     changeMonth(current_date_arrays.month_array, new_date_arrays.month_array);
     changeAssignments(new_date);
+    changeRequestedOffs(new_date);
     changeDates(new_date_arrays.date_array, current_date_arrays.month_array, new_date_arrays.month_array);
 
 }
@@ -1059,6 +1061,7 @@ function nextWeek() {
     
     changeMonth(current_date_arrays.month_array, new_date_arrays.month_array);
     changeAssignments(new_date);
+    changeRequestedOffs(new_date);
     changeDates(new_date_arrays.date_array, current_date_arrays.month_array, new_date_arrays.month_array);
 
 }
@@ -1104,9 +1107,24 @@ function changeAssignments(date) {
     }
     // call loadAssignments with the new date
     setTimeout(function () { 
-        loadAssignmentsFromDatabase(date);
-        loadRequestedOff(date); 
+        loadAssignmentsFromDatabase(date); 
     } , 400);
+
+}
+
+function changeRequestedOffs(date) {
+
+    let requested_offs = $('.requested_off_bubble');
+    for( let i = 0; i < requested_offs.length; i++ ) {
+        requested_offs[i].style.opacity = '0';
+        deleteElement(requested_offs[i]);
+
+    }
+
+    setTimeout( function() {
+        loadRequestedOff(date);
+
+    } , 400 );
 
 }
 
@@ -1411,7 +1429,7 @@ function deleteRequestedOff(element, day_index, date) {
     }
 
     function fail() {
-        console.log('deleteAssignmentFromDatabase() failed');
+        console.log('delete requested off bubble failed');
     }
 
 }
@@ -1440,8 +1458,30 @@ function loadRequestedOff(date) {
 
     function success(requested_list) {
         // create requested bubbles from return
-        console.log(requested_list);
-        
+        let requested_offs = $('.requested_off_drawer');
+
+        for( let day = 0; day<requested_list.length; day++ ) {
+            for( let bubble = 0; bubble<requested_list[day].length; bubble++ ) {
+                if ( requested_list[day][bubble][0] != undefined ) {
+                    let first_name = requested_list[day][bubble][0];
+                    let last_name = requested_list[day][bubble][1];
+
+                    let username = first_name.slice(0,1) + last_name;
+                    let new_bubble = document.createElement('div');
+                    new_bubble.className = username;
+                    new_bubble.classList.add('requested_off_bubble');
+                    new_bubble.innerText = first_name.slice(0,1);
+
+                    let parentColor = getParentColor(username);
+
+                    new_bubble.style.background = 'radial-gradient(circle at 0.66vw 0.66vw,' + parentColor + ', rgb(75, 75, 75))';
+
+                    dragElement(new_bubble);
+
+                    requested_offs[day].appendChild(new_bubble);
+                }
+            }
+        }
     }
 
     function fail() {
@@ -1449,6 +1489,7 @@ function loadRequestedOff(date) {
     }
 
 }
+
 
 // simple. pulls the div out with a certain class. prob not necessary
 function findParentBlock(block_list) {
@@ -1608,7 +1649,8 @@ function dragElement(elmnt, assignment_block=false) {
         cursorY = e.clientY;
 
         if ( elmnt.classList.contains('requested_off_bubble')) {
-            let day = elmnt.parentElement;
+            let drawer = elmnt.parentElement;
+            let day = drawer.parentElement;
             var index = day.classList[1];
             deleteRequestedOff(elmnt, index, pullDateFromPage());
 
@@ -2325,15 +2367,14 @@ function displayReassignedLeaderboard(stats_list) {
         }
     }
 
+}
 
-    function getParentColor(username) {
-        let employee_block_list = $('.employee_block');
-        for( let i = 0; i < employee_block_list.length; i++) {
-            if(employee_block_list[i].classList.contains(username)) {
-                return employee_block_list[i].style.backgroundColor;
-            }
+function getParentColor(username) {
+    let employee_block_list = $('.employee_block');
+    for (let i = 0; i < employee_block_list.length; i++) {
+        if (employee_block_list[i].classList.contains(username)) {
+            return employee_block_list[i].style.backgroundColor;
         }
-
     }
 
 }

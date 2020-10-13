@@ -234,9 +234,13 @@ def delete_requested():
 
     data_list = request.get_json()    
     username, month, day, year = data_list[0], data_list[1], data_list[2], data_list[3]
+    # month and day are == None
+    print(username, month, day, year)
     employee = Employee.query.filter(Employee.user_id == current_user.id).filter(Employee.username == username).first()
     # month, day, year, employee_id
+    print(employee)
     requested_off = Requested_Off.query.filter(Requested_Off.user_id == current_user.id).filter(Requested_Off.employee_id == employee.id).filter(Requested_Off.day == day).filter(Requested_Off.month == month).filter(Requested_Off.year == year).first()
+    print(requested_off)
     db.session.delete(requested_off)
     db.session.commit()
 
