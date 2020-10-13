@@ -1471,6 +1471,7 @@ function loadRequestedOff(date) {
                     new_bubble.className = username;
                     new_bubble.classList.add('requested_off_bubble');
                     new_bubble.innerText = first_name.slice(0,1);
+                    new_bubble.style.opacity = '0';
 
                     let parentColor = getParentColor(username);
 
@@ -1479,6 +1480,8 @@ function loadRequestedOff(date) {
                     dragElement(new_bubble);
 
                     requested_offs[day].appendChild(new_bubble);
+
+                    setTimeout( function () { new_bubble.style.opacity = '1'; }, 200 );
                 }
             }
         }
