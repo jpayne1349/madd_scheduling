@@ -28,14 +28,9 @@ var employeeList = [];
     Notes:
 
         feature ideas:
-          - PTO blocks can just have a border color of their regular background color
-            how to set the PTO attribute? must be a new database entry
-            could be called 'type' of assignment,
-            probably should look different on the assigned view, so it doesn't get confused with people that 
-            are actually working
+          - 
 
-          - RO entries could just be visual at start, but need to be used in a future calculation
-            I like the idea of little orbs at the bottom of the day_div of who has requested off.
+          - 
 
           - logout button
           - username shown in a tab? 
@@ -439,11 +434,16 @@ function createEmployeeColumn() {
     employee_column_div.id = 'employee_column_div';
     employee_column_div.style.opacity = '0';
 
-    let employee_block_spinner = document.createElement('div');
-    employee_block_spinner.className = 'employee_block_spinner';
-    employee_block_spinner.classList.add('.employee_block_spin');
+    let employee_block_spinner_outer = document.createElement('div');
+    employee_block_spinner_outer.className = 'employee_block_spinner_outer';
+    employee_block_spinner_outer.classList.add('.employee_block_spin_outer');
 
-    employee_column_div.appendChild(employee_block_spinner);
+    let employee_block_spinner_inner = document.createElement('div');
+    employee_block_spinner_inner.className = 'employee_block_spinner_inner';
+    employee_block_spinner_inner.classList.add('.employee_block_spin_inner');
+
+    employee_column_div.appendChild(employee_block_spinner_outer);
+    employee_column_div.appendChild(employee_block_spinner_inner);
 
     let page = document.getElementById('main_content');
 
@@ -729,18 +729,24 @@ function loadEmployeesFromDatabase() {
 
 // toggle the spinner to show and spin
 function toggleEmployeeSpinner() {
-    let spinner = $('.employee_block_spinner');
+    let outer_spinner = $('.employee_block_spinner_outer');
+    let inner_spinner = $('.employee_block_spinner_inner');
     
-    if( spinner[0].classList.contains('employee_block_spin')) {
-        spinner[0].style.opacity = '0';
+    if (outer_spinner[0].classList.contains('employee_block_spin_outer')) {
+        outer_spinner[0].style.opacity = '0';
+        inner_spinner[0].style.opacity = '0';
 
         setTimeout( function() {
-            spinner[0].classList.remove('employee_block_spin');
+            outer_spinner[0].classList.remove('employee_block_spin_outer');
+            inner_spinner[0].classList.remove('employee_block_spin_inner');
         }, 400 );
 
     } else {
-        spinner[0].style.opacity = '1';
-        spinner[0].classList.add('employee_block_spin');
+        outer_spinner[0].style.opacity = '1';
+        outer_spinner[0].classList.add('employee_block_spin_outer');
+
+        inner_spinner[0].style.opacity = '1';
+        inner_spinner[0].classList.add('employee_block_spin_inner');
     }
 
 }
@@ -1356,7 +1362,7 @@ function toggleAssignmentSpinner() {
 
         setTimeout( function() {
             spinner[0].classList.remove('assignment_spin');
-        1000}, 1000);
+        }, 1000);
 
     } else {
         spinner[0].style.opacity = '1';
@@ -1924,7 +1930,7 @@ function getDayDivSize() {
 
 }
 
-// adds the fade class to the element before removing it altogether
+// deletes element after a settimeout of 400 milliseconds
 function deleteElement(element) {
     setTimeout(function() {element.remove();}, 400); 
 

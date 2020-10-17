@@ -45,7 +45,7 @@ def create_employee():
 def load_employee():
     # needs to get database info and send in response
     employees = Employee.query.filter(Employee.user_id == current_user.id).all()
-
+    time.sleep(4)
     employee_list = []
     for index, employee  in enumerate(employees):
         # individual dictionaries created for employee and placed into a list
@@ -120,6 +120,8 @@ def load_assignment():
     date_object = request.get_json()
     year = date_object[2]
     classification = date_object[3]
+
+    time.sleep(5)
 
     response_list = []
     for i in range(7):

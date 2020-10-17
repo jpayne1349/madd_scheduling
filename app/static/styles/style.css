@@ -221,6 +221,7 @@
     height: 4vw;
     background-color: grey;
     transform: translate(2.3vw,6.85vw) rotate(-45deg);
+    border-radius: 0 0 2px 2px;
 }
 
 .prev_line_two {
@@ -228,6 +229,7 @@
     height: 4vw;
     background-color: grey;
     transform: translate(2vw, 4.2vw) rotate(45deg);
+    border-radius: 2px 2px 0 0;
 }
 
 .next_button {
@@ -246,6 +248,7 @@
     height: 4vw;
     background-color: grey;
     transform: translate(2.3vw,6.85vw) rotate(45deg);
+    border-radius:  0 0 2px 2px;
 }
 
 .next_line_two {
@@ -253,6 +256,7 @@
     height: 4vw;
     background-color: grey;
     transform: translate(2vw, 4.2vw) rotate(-45deg);
+    border-radius: 2px 2px 0 0;
 }
 
 
@@ -281,14 +285,16 @@
     width: 0.2vw;
     height: 1.5vw;
     background-color: grey;
-    transform: translate(1vw,0vw) rotate(45deg);
+    transform: translate(1.05vw,0.13vw) rotate(45deg);
+    border-radius: 2px 2px 0 0;
 }
 
 .form_arrow_two {
     width: 0.2vw;
     height: 1.5vw;
     background-color: grey;
-    transform: translate(0.8vw, 1vw) rotate(-45deg);
+    transform: translate(0.82vw, 1.08vw) rotate(-45deg);
+    border-radius: 0 0 2px 2px;
 }
 
 .hide_form_arrow {
@@ -823,25 +829,50 @@
     display: block;
 }
 
-.employee_block_spinner {
+.employee_block_spinner_outer {
     position: absolute;
-    top: 65vh;
-    left: 48vw;
-    width: 1.5vw;
-    height: 1.5vw;
+    top: calc(68vh - 1.5vw);
+    left: calc(50% - 1.5vw);
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
-    border: solid 0.5vw rgb(236, 236, 236);
-    border-top: solid 0.5vw rgb(124, 124, 124);
+    border: solid 0.5vw rgba(255, 255, 255, 0);
+    border-top: solid 0.5vw rgba(135, 206, 250, 0.86);
     z-index: 3;
     display: none;
     transition: opacity .4s;
 }
 
-.employee_block_spin {
+.employee_block_spinner_inner {
+    position: absolute;
+    top: calc(68vh - 0.75vw);
+    left: calc(50% - 0.75vw);
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 50%;
+    border: solid 0.5vw rgba(255, 255, 255, 0);
+    border-top: solid 0.5vw rgba(250, 181, 135, 0.75);
+    z-index: 4;
+    display: none;
+    transition: opacity .4s;
+
+}
+
+.employee_block_spin_outer {
     animation-name: spin;
-    animation-duration: .8s;
+    animation-duration: 1s;
     animation-iteration-count: infinite;
-    animation-timing-function: ease;
+    animation-timing-function: linear;
+    display: block;
+
+}
+
+.employee_block_spin_inner{
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
     display: block;
 
 }
