@@ -805,27 +805,53 @@
 
 .assignment_spinner_container {
     position: absolute;
-    top: 90%;
+    top: 87%;
     left: 7vw;
 
 }
 
-.assignment_spinner {
-    width: 1.5vw;
-    height: 1.5vw;
+.assignment_spinner_outer {
+    position: relative;
+    top:0;
+    left: 0;
+    width: 2vw;
+    height: 2vw;
     border-radius: 50%;
-    border: solid 0.5vw rgba(199, 199, 199, 0.301);
-    border-top: solid 0.5vw rgb(255, 255, 255);
+    border: solid 0.5vw rgba(199, 199, 199, 0);
+    border-top: solid 0.5vw rgba(250, 181, 135, 0.75);
     display: none;
     transition: opacity .4s;
 
 }
 
-.assignment_spin {
+.assignment_spinner_inner {
+    position: absolute;
+    width: 1vw;
+    height: 1vw;
+    top: 0.5vw;
+    left: 0.5vw;
+    border-radius: 50%;
+    border: solid 0.5vw rgba(199, 199, 199, 0);
+    border-top: solid 0.5vw  rgba(135, 206, 250, 0.86);
+    display: none;
+    transition: opacity .4s;
+
+}
+
+.assignment_spin_outer {
     animation-name: spin;
-    animation-duration: .8s;
+    animation-duration: 1s;
     animation-iteration-count: infinite;
-    animation-timing-function: ease;
+    animation-timing-function: linear;
+    display: block;
+}
+
+.assignment_spin_inner {
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
     display: block;
 }
 

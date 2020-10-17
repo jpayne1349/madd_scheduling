@@ -3,7 +3,7 @@
 
 // global variables
 
-var version_number = 'Oct-13-2020 : v0.5.6 - requested off bubbles added to the database, all functions seem to be working';
+var version_number = 'Oct-17-2020 : v0.5.7 - made the loading spinners look cooler...';
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -224,10 +224,14 @@ function createWeekTemplate() {
     let assignment_spinner_container = document.createElement('div');
     assignment_spinner_container.className = 'assignment_spinner_container';
 
-    let assignment_spinner = document.createElement('div');
-    assignment_spinner.className = 'assignment_spinner';
+    let assignment_spinner_outer = document.createElement('div');
+    assignment_spinner_outer.className = 'assignment_spinner_outer';
 
-    assignment_spinner_container.appendChild(assignment_spinner);
+    let assignment_spinner_inner = document.createElement('div');
+    assignment_spinner_inner.className = 'assignment_spinner_inner';
+
+    assignment_spinner_container.appendChild(assignment_spinner_outer);
+    assignment_spinner_container.appendChild(assignment_spinner_inner);
 
     week_div.appendChild(next_div);
 
@@ -1355,18 +1359,26 @@ function loadAssignmentsFromDatabase(date) {
 }
 
 function toggleAssignmentSpinner() {
-    let spinner = $('.assignment_spinner');
+    let outer_spinner = $('.assignment_spinner_outer');
+    let inner_spinner = $('.assignment_spinner_inner');
 
-    if(spinner[0].classList.contains('assignment_spin')) {
-        spinner[0].style.opacity = '0';
+    if (outer_spinner[0].classList.contains('assignment_spin_outer')) {
+        outer_spinner[0].style.opacity = '0';
+
+        inner_spinner[0].style.opacity = '0';
 
         setTimeout( function() {
-            spinner[0].classList.remove('assignment_spin');
+            outer_spinner[0].classList.remove('assignment_spin_outer');
+
+            inner_spinner[0].classList.remove('assignment_spin_inner');
         }, 1000);
 
     } else {
-        spinner[0].style.opacity = '1';
-        spinner[0].classList.add('assignment_spin');
+        outer_spinner[0].style.opacity = '1';
+        outer_spinner[0].classList.add('assignment_spin_outer');
+
+        inner_spinner[0].style.opacity = '1';
+        inner_spinner[0].classList.add('assignment_spin_inner');
 
     }
 
